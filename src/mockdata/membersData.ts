@@ -18,6 +18,7 @@ import confidence from "../assets/images/png/directors/confidence.jpeg";
 import lloyd from "../assets/images/png/directors/lloyd.png";
 import joshua from "../assets/images/png/directors/omeonu joshua.png";
 import anuoluwapo from "../assets/images/png/directors/Anuoluwapo Enitan Popoola.jpeg";
+import marycelestina from "../assets/images/png/directors/marycelestina-albert.jpg";
 import type { MemberProfile } from "../types";
 
 /**
@@ -134,6 +135,20 @@ export const allMembers: MemberProfile[] = [
       "Confidence Onuoha is a Petroleum and Gas Engineering graduate and a pioneer student of Nigeria Maritime University (NMU). She is passionate about professional development, leadership, service, and community building.\n\nDuring her time at NMU, Confidence was one of the founding members of Divine Mercy Chaplaincy, where she served as Financial Secretary for four years. Through this role, she contributed to the effective financial administration of the organization and supported various initiatives focused on fellowship and community development.\n\nHer commitment to service and leadership has continued beyond her university years. She currently serves as Assistant Treasurer of the NMU Alumni Organization, contributing to the financial management and activities of the alumni community.\n\nProfessionally, Confidence is currently a Financial Advisor with AIICO Insurance PLC, where she works with individuals and businesses to provide financial protection and planning solutions that align with their needs and goals.\n\nWith a foundation in engineering and experience in financial advisory, leadership, and organizational administration, Confidence continues to build a dynamic career while seeking opportunities to learn, grow, serve, and make a meaningful impact in her professional and wider community.",
     category: "executive",
   },
+  {
+    id: "marycelestina-albert",
+    name: "Marycelestina Albert",
+    title: "Auditor",
+    profession: "Audit Analyst | Audit & Assurance Professional",
+    tenure: "2026 – 2028",
+    image: marycelestina,
+    rank: "8",
+    shortBio:
+      "Experienced Audit Analyst at KPMG Nigeria and pioneer Petroleum and Gas Engineering graduate of NMU. Serves as Auditor of the NMU Alumni Association.",
+    fullBio:
+      "Marycelestina Albert is an experienced Audit Analyst at KPMG Nigeria, with professional experience in audit and assurance, financial reporting, risk assessment, and internal controls. She is a pioneer graduate of Nigeria Maritime University (NMU), where she obtained a Bachelor of Engineering degree in Petroleum and Gas Engineering.\n\nShe currently works in the audit profession, contributing to audit engagements and the evaluation of financial information and internal control processes. Her professional interests include financial accountability, risk management, corporate governance, and the promotion of sound financial practices.\n\nBefore commencing her career in audit, Marycelestina completed her National Youth Service Corps (NYSC) at Beryl Voice Academy, Ogun State, where she gained teaching experience and developed valuable communication, organisational, and problem-solving skills.\n\nHer career reflects a blend of technical education, analytical expertise, and professional adaptability. As Auditor of the NMU Alumni Association, she is committed to promoting transparency, accountability, and responsible financial management while supporting the Association's continued growth and development.",
+    category: "executive",
+  },
 
   // ===== 5. DIRECTORS =====
   {
@@ -144,7 +159,7 @@ export const allMembers: MemberProfile[] = [
       "Tax Professional | Public Finance Practitioner | Legislative & Fiscal Policy Professional",
     tenure: "2026 – 2028",
     image: philemon,
-    rank: "8",
+    rank: "9",
     shortBio:
       "Tax and public sector professional with experience across tax administration, public finance, legislative affairs and fiscal reform.",
     fullBio:
@@ -158,7 +173,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Data Analyst | Communications Professional",
     tenure: "2026 – 2028",
     image: betty,
-    rank: "9",
+    rank: "10",
     shortBio:
       "First-Class graduate of Port Management. Data Analyst, Social Media Manager, and communications professional serving as Director of Communication and Media.",
     fullBio:
@@ -172,7 +187,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Petroleum & Gas Engineer | Field Engineer",
     tenure: "2026 – 2028",
     image: kenny,
-    rank: "10",
+    rank: "11",
     shortBio:
       "Petroleum and Gas Engineering graduate and multidisciplinary professional with experience spanning engineering, technology, innovation, and community leadership.",
     fullBio:
@@ -186,7 +201,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Marine Geology | Regional Lead (North)",
     tenure: "2026 – 2028",
     image: kuye,
-    rank: "11",
+    rank: "12",
     shortBio:
       "Marine Geology graduate of Nigeria Maritime University and Regional Lead (North) at Neo Urban Gas and Power. Specializes in business development, stakeholder engagement, and strategic partnerships.",
     fullBio:
@@ -200,7 +215,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Project Manager | Entrepreneur",
     tenure: "2026 – 2028",
     image: akhabue,
-    rank: "12",
+    rank: "13",
     shortBio:
       "Project Manager, Talent Manager, entrepreneur, and business leader. Owner of Shop Lure Essentials.",
     fullBio:
@@ -214,7 +229,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Software Engineer | Digital Platforms",
     tenure: "2026 – 2028",
     image: joshua,
-    rank: "13",
+    rank: "14",
     shortBio:
       "Software engineer and Director of Database Management. Builds the digital platforms and member database that the NMU Alumni Association operates on, and supports operational work including mentorship.",
     fullBio:
@@ -228,7 +243,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Mechanical Engineer",
     tenure: "2026 – 2028",
     image: bashua,
-    rank: "14",
+    rank: "15",
     shortBio:
       "Mechanical Engineering graduate with a strong passion for innovation, research, and problem-solving.",
     fullBio:
@@ -244,7 +259,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Geologist | GIS Professional | SDGs Advocate",
     tenure: "2026 – 2028",
     image: marvelous,
-    rank: "15",
+    rank: "16",
     shortBio:
       "Pioneer graduate with First Class Honours in Marine Geology. Assistant Director of Institutional Advancement & Development.",
     fullBio:
@@ -258,7 +273,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Community Leader | Agripreneur",
     tenure: "2026 – 2028",
     image: john,
-    rank: "16",
+    rank: "17",
     shortBio:
       "Dedicated community leader, agripreneur, and technology enthusiast serving as Assistant Director of Welfare.",
     fullBio:
@@ -272,7 +287,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Metering Engineer | Petroleum & Gas Engineer",
     tenure: "2026 – 2028",
     image: Chidimma,
-    rank: "17",
+    rank: "18",
     shortBio:
       "Petroleum and Gas Engineer with experience in crude oil metering, custody transfer operations, hydrocarbon measurement, and production support.",
     fullBio:
@@ -288,7 +303,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Marine Economics & Finance | Pioneer Set",
     tenure: "2026 – 2028",
     image: kalu,
-    rank: "18",
+    rank: "19",
     shortBio:
       "BSc in Marine Economics and Finance (pioneer set). Recipient of the NMU Most Disciplined Cadet Award. Currently serves as Provost Marshal.",
     fullBio:
@@ -304,7 +319,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Marine Economics & Finance Graduate",
     tenure: "—",
     image: godwill,
-    rank: "19",
+    rank: "20",
     shortBio:
       "Graduate of Marine Economics and Finance with a passion for continuous learning and personal development.",
     fullBio:
@@ -318,7 +333,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Program Strategy & Execution | MERL",
     tenure: "—",
     image: anuoluwapo,
-    rank: "20",
+    rank: "21",
     shortBio:
       "Program strategy and execution support practitioner at Mastercard Foundation, with experience in MERL, impact delivery, data and insights, and stakeholder engagement. Marine Geology graduate of Nigeria Maritime University.",
     fullBio:
