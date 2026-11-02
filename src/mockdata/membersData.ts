@@ -309,6 +309,20 @@ export const allMembers: MemberProfile[] = [
       "Ezekwe Chidimma Cynthia is a Petroleum and Gas Engineer with practical experience in crude oil metering operations, hydrocarbon measurement systems, and custody transfer processes within the Nigerian oil and gas industry. She holds a Bachelor of Engineering (B.Eng.) degree in Petroleum and Gas Engineering from the Nigeria Maritime University.\n\nCurrently serving as a Metering Engineer with SeaQuest Upstream Service Limited, working on the Heirs Energy field, Chidimma is responsible for operating and maintaining LACT systems to ensure the accurate measurement and transfer of crude oil. A member of the Society of Petroleum Engineers (SPE), she is passionate about continuous learning, professional development, and contributing to safe and efficient energy operations.",
     category: "directors",
   },
+  {
+    id: "anuoluwapo-enitan-popoola",
+    name: "Anuoluwapo Enitan Popoola",
+    title: "Assistant Director of Communication and Media",
+    profession: "Program Strategy & Execution | MERL",
+    tenure: "2026 – 2028",
+    image: anuoluwapo,
+    rank: "20",
+    shortBio:
+      "Program strategy and execution support practitioner at Mastercard Foundation, with experience in MERL, impact delivery, data and insights, and stakeholder engagement. Marine Geology graduate of Nigeria Maritime University.",
+    fullBio:
+      "Anuoluwapo Enitan Popoola is a program strategy and execution support practitioner at Mastercard Foundation with experience in Monitoring, Evaluation, Research and Learning (MERL), impact delivery, data and insights generation, stakeholder engagement, and ecosystem intelligence.\n\nA graduate of Marine Geology from the Nigeria Maritime University, he has contributed to initiatives that leverage evidence, research, and learning to strengthen program effectiveness and drive measurable outcomes for young people across Africa. His work spans program performance tracking, strategic planning, knowledge generation, and cross-functional collaboration, translating insights into actionable solutions that inform decision-making and enhance impact.\n\nPassionate about youth empowerment, sustainable development, and continuous learning, he is committed to helping individuals and institutions unlock potential, achieve meaningful results, and create lasting positive change.",
+    category: "directors",
+  },
 
   // ===== 7. PROVOST MARSHAL =====
   {
@@ -318,7 +332,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Marine Economics & Finance | Pioneer Set",
     tenure: "2026 – 2028",
     image: kalu,
-    rank: "20",
+    rank: "21",
     shortBio:
       "BSc in Marine Economics and Finance (pioneer set). Recipient of the NMU Most Disciplined Cadet Award. Currently serves as Provost Marshal.",
     fullBio:
@@ -334,25 +348,11 @@ export const allMembers: MemberProfile[] = [
     profession: "Marine Economics & Finance Graduate",
     tenure: "—",
     image: godwill,
-    rank: "21",
+    rank: "22",
     shortBio:
       "Graduate of Marine Economics and Finance with a passion for continuous learning and personal development.",
     fullBio:
       "My name is Gloria Godwill, a graduate of Marine Economics and Finance with a passion for continuous learning and personal development. I enjoy reading, acquiring new skills, and exploring opportunities for growth both personally and professionally.\nI recently completed my National Youth Service Corps (NYSC) program, which provided me with valuable experiences in leadership, teamwork, and community service. I am eager to build a successful career, make meaningful contributions in my field, and continue developing my knowledge and skills.\nI am excited to be part of this alumni community, reconnecting with old friends, sharing experiences, and creating opportunities for networking, collaboration, and growth.",
-    category: "members",
-  },
-  {
-    id: "anuoluwapo-enitan-popoola",
-    name: "Anuoluwapo Enitan Popoola",
-    title: "Assistant Director of Communication and Media",
-    profession: "Program Strategy & Execution | MERL",
-    tenure: "—",
-    image: anuoluwapo,
-    rank: "22",
-    shortBio:
-      "Program strategy and execution support practitioner at Mastercard Foundation, with experience in MERL, impact delivery, data and insights, and stakeholder engagement. Marine Geology graduate of Nigeria Maritime University.",
-    fullBio:
-      "Anuoluwapo Enitan Popoola is a program strategy and execution support practitioner at Mastercard Foundation with experience in Monitoring, Evaluation, Research and Learning (MERL), impact delivery, data and insights generation, stakeholder engagement, and ecosystem intelligence.\n\nA graduate of Marine Geology from the Nigeria Maritime University, he has contributed to initiatives that leverage evidence, research, and learning to strengthen program effectiveness and drive measurable outcomes for young people across Africa. His work spans program performance tracking, strategic planning, knowledge generation, and cross-functional collaboration, translating insights into actionable solutions that inform decision-making and enhance impact.\n\nPassionate about youth empowerment, sustainable development, and continuous learning, he is committed to helping individuals and institutions unlock potential, achieve meaningful results, and create lasting positive change.",
     category: "members",
   },
 ];
