@@ -19,6 +19,7 @@ import lloyd from "../assets/images/png/directors/lloyd.png";
 import joshua from "../assets/images/png/directors/omeonu joshua.png";
 import anuoluwapo from "../assets/images/png/directors/Anuoluwapo Enitan Popoola.jpeg";
 import marycelestina from "../assets/images/png/directors/marycelestina-albert.jpg";
+import olisemeke from "../assets/images/png/directors/olisemeke-azuka.jpg";
 import type { MemberProfile } from "../types";
 
 /**
@@ -250,6 +251,20 @@ export const allMembers: MemberProfile[] = [
       "Mubarak Bashua is a Mechanical Engineer with a strong passion for innovation, research, and the application of engineering principles to solve real-world challenges. He holds a degree in Mechanical Engineering and has developed a multidisciplinary interest in energy systems, materials science, data analytics, process optimization, and industrial operations.\n\nProfessionally, Mubarak has gained hands-on experience in engineering and maintenance operations, contributing to the reliability, efficiency, and performance of industrial equipment and processes. His work has involved supporting operational improvements, analyzing system performance, and implementing practical solutions that enhance productivity and sustainability. Through these experiences, he has developed strong technical, analytical, and problem-solving skills, as well as an appreciation for the role of engineering in driving industrial and economic development.\n\nBeyond his professional responsibilities, Mubarak is deeply interested in emerging technologies and their potential to transform industries. He is particularly fascinated by the intersection of engineering, data-driven decision-making, and sustainable development. His academic and personal interests have led him to explore topics such as energy materials, nanotechnology, machine learning applications, and digital transformation, reflecting his commitment to staying at the forefront of technological advancement.\n\nMubarak is a lifelong learner who values continuous personal and professional growth. He actively seeks opportunities to expand his knowledge, collaborate with diverse teams, and contribute to initiatives that create meaningful impact. As he continues to build his career, he remains dedicated to leveraging engineering and innovation to address complex challenges, improve operational excellence, and contribute to a more sustainable future.",
     category: "directors",
   },
+  {
+    id: "olisemeke-azuka",
+    name: "Olisemeke Azuka",
+    title: "Director for Maritime Affairs",
+    profession: "Maritime Labour Consultant | Seafarer",
+    tenure: "2026 – 2028",
+    image: olisemeke,
+    rank: "16",
+    shortBio:
+      "Maritime Labour Consultant and active Seafarer with hands-on experience in shipboard operations, logistics, safety, and maritime regulatory compliance. Pioneer graduate of NMU.",
+    fullBio:
+      "Olisemeke Azuka is a Maritime Labour Consultant and an active Seafarer with hands-on practical experience in shipboard operations, logistics, safety, and maritime regulatory compliance.\n\nHe is a pioneer graduate of the Nigerian Maritime University. He also holds other academic and professional qualifications relevant to a seafaring career, covering areas such as offshore navigation, seamanship, shipping logistics, general ship knowledge, maritime safety, and various maritime regulations and standards.\n\nHe currently works in the offshore sector of the Nigerian maritime industry and the downstream sector of the petroleum industry.\n\nHaving served on board various seagoing vessels, working alongside different nationalities under different articles, and with substantial years of experience within the Nigerian maritime domain and across various ports in Africa, he has acquired first-hand knowledge of port operations, international relations, seafaring, and maritime labour standards.\n\nAs an alumnus, his dedication to improving human capacity and maritime affairs enlightenment will help propel smooth career advancement and shape the maritime know-how of members across the alumni community.",
+    category: "directors",
+  },
 
   // ===== 6. ASSISTANT DIRECTORS =====
   {
@@ -259,7 +274,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Geologist | GIS Professional | SDGs Advocate",
     tenure: "2026 – 2028",
     image: marvelous,
-    rank: "16",
+    rank: "17",
     shortBio:
       "Pioneer graduate with First Class Honours in Marine Geology. Assistant Director of Institutional Advancement & Development.",
     fullBio:
@@ -273,7 +288,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Community Leader | Agripreneur",
     tenure: "2026 – 2028",
     image: john,
-    rank: "17",
+    rank: "18",
     shortBio:
       "Dedicated community leader, agripreneur, and technology enthusiast serving as Assistant Director of Welfare.",
     fullBio:
@@ -287,7 +302,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Metering Engineer | Petroleum & Gas Engineer",
     tenure: "2026 – 2028",
     image: Chidimma,
-    rank: "18",
+    rank: "19",
     shortBio:
       "Petroleum and Gas Engineer with experience in crude oil metering, custody transfer operations, hydrocarbon measurement, and production support.",
     fullBio:
@@ -303,7 +318,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Marine Economics & Finance | Pioneer Set",
     tenure: "2026 – 2028",
     image: kalu,
-    rank: "19",
+    rank: "20",
     shortBio:
       "BSc in Marine Economics and Finance (pioneer set). Recipient of the NMU Most Disciplined Cadet Award. Currently serves as Provost Marshal.",
     fullBio:
@@ -319,7 +334,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Marine Economics & Finance Graduate",
     tenure: "—",
     image: godwill,
-    rank: "20",
+    rank: "21",
     shortBio:
       "Graduate of Marine Economics and Finance with a passion for continuous learning and personal development.",
     fullBio:
@@ -333,7 +348,7 @@ export const allMembers: MemberProfile[] = [
     profession: "Program Strategy & Execution | MERL",
     tenure: "—",
     image: anuoluwapo,
-    rank: "21",
+    rank: "22",
     shortBio:
       "Program strategy and execution support practitioner at Mastercard Foundation, with experience in MERL, impact delivery, data and insights, and stakeholder engagement. Marine Geology graduate of Nigeria Maritime University.",
     fullBio:
