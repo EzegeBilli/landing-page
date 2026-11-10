@@ -1,109 +1,72 @@
-// components/WhoWeAreSection/WhoWeAreSection.tsx
-import React from "react";
+import shared from "../aboutShared.module.css";
 import styles from "./WhoWeAreSection.module.css";
-import { Anchor, Building2, MapPin } from "lucide-react";
 
-type InfoItemProps = {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-};
+const factSheet = [
+  { term: "Full name", value: "Nigeria Maritime University Alumni Association" },
+  { term: "Legal status", value: "Incorporated Trustees, Part F, CAMA 2020" },
+  { term: "Character", value: "Non-partisan, non-sectarian, non-profit" },
+  { term: "Headquarters", value: "Delta State, Nigeria" },
+  { term: "Motto", value: "“Charting the Future, Upholding Our Legacy”" },
+];
 
-const InfoItem = ({ icon, label, value }: InfoItemProps) => {
-  return (
-    <div className={styles.infoItem}>
-      <div className={styles.infoIcon}>{icon}</div>
-      <div className={styles.infoText}>
-        <span className={styles.infoLabel}>{label}: </span>
-        <span className={styles.infoValue}>{value}</span>
-      </div>
-    </div>
-  );
-};
+const colours = [
+  { name: "Navy Blue", className: styles.navy },
+  { name: "Gold", className: styles.gold },
+  { name: "White", className: styles.white },
+];
 
 const WhoWeAreSection = () => {
   return (
-    <section className={styles.section}>
-      <div className={styles.container}>
-        {/* LEFT CONTENT */}
-        <div className={styles.left}>
-          <span className={styles.kicker}>OUR IDENTITY</span>
+    <section id="who-we-are" className={shared.section} aria-labelledby="who-we-are-title">
+      <div className={shared.inner}>
+        <header className={shared.head}>
+          <span className={shared.index}><b>01</b>Our identity</span>
+          <h2 id="who-we-are-title" className={shared.title}>Who we are</h2>
+        </header>
 
-          <h2 className={styles.title}>Who We Are</h2>
-
-          <p className={styles.paragraph}>
-            The Nigeria Maritime University Alumni Association (NMUAA) is the
-            official alumni body of Nigeria Maritime University, Okerenkoko 
-            the first dedicated maritime university in Nigeria and West Africa.
-            We are a body of Incorporated Trustees, registered under Part F of
-            the Companies and Allied Matters Act, 2020 (CAMA), operating as a
-            non-partisan, non-sectarian, non-profit organisation under the laws
-            of the Federal Republic of Nigeria.
-          </p>
-
-          <p className={styles.paragraph}>
-            Our membership spans graduates across all faculties of NMU from
-            Marine Engineering and Naval Architecture to Maritime Law,
-            Environmental Science, and Transport & Logistics. We also welcome
-            former academic and administrative staff of the university as
-            Associate Members, and honour distinguished individuals with
-            Honorary Membership on the recommendation of the National General
-            Assembly.
-          </p>
-
-          <div className={styles.infoList}>
-            <InfoItem
-              icon={<Building2 size={18} strokeWidth={1.8} />}
-              label="Legal Status"
-              value="Incorporated Trustees (CAMA 2020)"
-            />
-            <InfoItem
-              icon={<MapPin size={18} strokeWidth={1.8} />}
-              label="Headquarters"
-              value="Delta State, Nigeria"
-            />
+        <div className={styles.layout}>
+          <div className={styles.copy}>
+            <p className={styles.lead}>
+              The Nigeria Maritime University Alumni Association (NMUAA) is the official alumni body of
+              Nigeria Maritime University, Okerenkoko, the first dedicated maritime university in Nigeria
+              and West Africa.
+            </p>
+            <p>
+              We are a body of Incorporated Trustees, registered under Part F of the Companies and Allied
+              Matters Act, 2020 (CAMA), operating as a non-partisan, non-sectarian, non-profit organisation
+              under the laws of the Federal Republic of Nigeria.
+            </p>
+            <p>
+              Our membership spans graduates across all faculties of NMU, from Marine Engineering and Naval
+              Architecture to Maritime Law, Environmental Science, and Transport &amp; Logistics. We also
+              welcome former academic and administrative staff as Associate Members, and honour
+              distinguished individuals with Honorary Membership on the recommendation of the National
+              General Assembly.
+            </p>
           </div>
-        </div>
 
-        {/* RIGHT CARD */}
-        <div className={styles.right}>
-          <div className={styles.identityCard}>
-            <div className={styles.cardTopIcon}>
-             <Anchor size={54} strokeWidth={1.8} color="white" />
+          <aside className={styles.sheet} aria-label="Association at a glance">
+            <div className={styles.sheetHead}>
+              <span>NMUAA</span>
+              <small>At a glance</small>
             </div>
-
-            <div className={styles.cardOrgName}>
-              NIGERIA MARITIME UNIVERSITY
-              <br />
-              ALUMNI ASSOCIATION
-            </div>
-
-            <div className={styles.cardAcronym}>NMUAA</div>
-
-            <div className={styles.cardTagline}>
-              "Charting the Future, Upholding Our Legacy"
-            </div>
-
-            <div className={styles.divider} />
-
-            <div className={styles.cardFooterTitle}>OUR OFFICIAL COLOURS</div>
-
-            <div className={styles.colorsRow}>
-              <div className={styles.colorItem}>
-                      <span className={styles.naybluSwatch} />
-                <span className={styles.colorLabel}>Navy Blue</span>
+            <dl>
+              {factSheet.map((row) => (
+                <div key={row.term} className={styles.row}>
+                  <dt>{row.term}</dt>
+                  <dd>{row.value}</dd>
+                </div>
+              ))}
+              <div className={styles.row}>
+                <dt>Official colours</dt>
+                <dd className={styles.colours}>
+                  {colours.map((c) => (
+                    <span key={c.name}><i className={c.className} aria-hidden="true" />{c.name}</span>
+                  ))}
+                </dd>
               </div>
-
-              <div className={styles.colorItem}>
-                <span className={styles.goldSwatch} />
-                <span className={styles.colorLabel}>Gold</span>
-              </div>
-              <div className={styles.colorItem}>
-                <span className={styles.whiteSwatch} />
-                <span className={styles.colorLabel}>White</span>
-              </div>
-            </div>
-          </div>
+            </dl>
+          </aside>
         </div>
       </div>
     </section>

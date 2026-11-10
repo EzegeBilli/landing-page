@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Anchor } from "lucide-react";
+import logo from "../../../assets/images/svg/nmulogo.png";
 import styles from "./AuthSidePanel.module.css";
 import { AUTH_CAROUSEL } from "./authCarouselData";
 
@@ -21,7 +21,7 @@ const AuthSidePanel = () => {
         <div
           key={slide.image}
           className={`${styles.slide} ${i === index ? styles.slideActive : ""}`}
-          style={{ backgroundImage: `url(${slide.image})` }}
+          style={{ backgroundImage: `url(${slide.image})`, backgroundPosition: slide.position }}
         />
       ))}
 
@@ -29,8 +29,7 @@ const AuthSidePanel = () => {
 
       <div className={styles.content}>
         <div className={styles.brand}>
-          <Anchor size={22} />
-          <span>NMU Alumni Network</span>
+          <img src={logo} alt="Nigeria Maritime University Alumni Association" className={styles.brandLogo} />
         </div>
 
         <div className={styles.textBlock}>

@@ -1,155 +1,56 @@
-.section {
-  width: 100%;
-  background: #f6f8fc;
-  padding: 100px 20px;
+/* Logo carousel: continuous marquee that pauses on hover/focus or via the Pause button. */
+.viewport {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
-
-.container {
-  max-width: 1240px;
-  margin: 0 auto;
-  text-align: center;
+.track {
+  list-style: none; margin: 0; padding: 4px 0;
+  display: flex; gap: 20px; width: max-content;
+  animation: marquee 48s linear infinite;
 }
-
-.tag {
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #d39b1d;
-  margin-bottom: 18px;
-}
-
-.heading {
-  font-size: 54px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: #082c5b;
-  margin-bottom: 20px;
-}
-
-.description {
-  max-width: 700px;
-  margin: 0 auto 60px;
-  font-size: 26px;
-  line-height: 1.6;
-  color: #667a96;
-}
-
-/* Card Layout */
-
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 18px;
-}
-
-/* Card */
+.viewport:hover .track, .viewport:focus-within .track, .paused .track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(calc(-50% - 10px)); } }
 
 .card {
-  width: 285px;
-  min-height: 92px;
-  background: #fff;
-  border: 1px solid #d9e1ec;
-  border-radius: 14px;
+  margin: 0; width: 260px; height: 100%;
+  display: flex; flex-direction: column;
+  background: #fff; border: 1px solid rgba(10, 37, 64, 0.14);
+}
+.logoBox {
+  height: 150px; padding: 22px;
+  display: grid; place-items: center;
+  border-bottom: 1px solid rgba(10, 37, 64, 0.1);
+}
+.logoBox img { max-height: 100px; max-width: 120px; object-fit: contain; }
+.logoBox img.wide { max-height: 72px; max-width: 210px; }
+.wordmark {
+  font-family: "Poppins", sans-serif; font-size: 34px; font-weight: 600; letter-spacing: -0.02em; color: var(--primary);
+  padding-bottom: 8px; border-bottom: 2px solid var(--accent); line-height: 1;
+}
+.card figcaption { padding: 16px 18px 18px; display: grid; gap: 4px; }
+.card strong { font-family: "Poppins", sans-serif; font-size: 15px; font-weight: 600; color: var(--primary); }
+.card figcaption span { font-size: 13px; line-height: 1.5; color: #4a5b6c; }
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.controls { display: flex; align-items: center; gap: 16px; margin-top: 24px; }
+.controls button {
+  padding: 8px 14px; border: 1px solid rgba(10, 37, 64, 0.3); border-radius: 4px; background: #fff;
+  font-size: 13px; font-weight: 600; color: var(--primary); cursor: pointer;
+}
+.controls button:hover { border-color: var(--primary); }
+.controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.controls span { font-size: 13px; color: #6b7a89; }
 
-  padding: 18px;
-
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-
-  transition: all 0.3s ease;
+/* Reduced motion: no animation, swipe/scroll the row instead. */
+@media (prefers-reduced-motion: reduce) {
+  .viewport { overflow-x: auto; -webkit-mask-image: none; mask-image: none; scroll-snap-type: x mandatory; padding: 0 40px; }
+  .track { animation: none; }
+  .dup { display: none; }
+  .track li { scroll-snap-align: start; }
+  .controls button { display: none; }
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-}
-
-.card h3 {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 700;
-  color: #082c5b;
-}
-
-.card p {
-  margin-top: 12px;
-  font-size: 16px;
-  line-height: 1.4;
-  color: #6a7b93;
-}
-
-/* Large Tablets */
-
-@media (max-width: 1200px) {
-  .heading {
-    font-size: 46px;
-  }
-
-  .description {
-    font-size: 22px;
-  }
-
-  .card {
-    width: 260px;
-  }
-}
-
-/* Tablets */
-
-@media (max-width: 768px) {
-  .section {
-    padding: 80px 20px;
-  }
-
-  .heading {
-    font-size: 36px;
-  }
-
-  .description {
-    font-size: 18px;
-    margin-bottom: 45px;
-  }
-
-  .card {
-    width: calc(50% - 12px);
-  }
-
-  .card h3 {
-    font-size: 24px;
-  }
-
-  .card p {
-    font-size: 15px;
-  }
-}
-
-/* Mobile */
-
-@media (max-width: 480px) {
-  .heading {
-    font-size: 30px;
-  }
-
-  .description {
-    font-size: 16px;
-  }
-
-  .card {
-    width: 100%;
-  }
-
-  .card h3 {
-    font-size: 22px;
-  }
-
-  .card p {
-    font-size: 14px;
-  }
+@media (max-width: 860px) {
+  .card { width: 220px; }
+  .logoBox { height: 130px; }
 }

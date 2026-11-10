@@ -31,7 +31,7 @@ const ALUMNI: AlumniProfile[] = [
   {
     name: "Dr. Olayinka Adeyemi",
     year: "2021",
-    discipline: "B.Sc. Marine Economics",
+    discipline: "B.Sc. Marine Economics & Finance",
     role: "Port Operations Manager, Apapa Port",
     quote: "My network from NMU remains my most valuable career asset.",
     img: "https://images.unsplash.com/photo-1554765345-6ad6a5417cde?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBwb3J0cmFpdCUyMG1hbnxlbnwxfHx8fDE3NzYwODI0Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -39,7 +39,7 @@ const ALUMNI: AlumniProfile[] = [
   {
     name: "Aisha Mohammed",
     year: "2024",
-    discipline: "B.Sc. Meteorology",
+    discipline: "B.Sc. Meteorology & Climate Change",
     role: "Climate Researcher, NIMET",
     quote: "We are the pioneers of environmental maritime safety in Africa.",
     img: "https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBwb3J0cmFpdCUyMHdvbWFufGVufDF8fHx8MTc3NjE2NjAwN3ww&ixlib=rb-4.1.0&q=80&w=1080",

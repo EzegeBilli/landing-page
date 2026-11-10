@@ -1,0 +1,59 @@
+/* Shared layout for About page sections: numbered editorial headers on a 12-column rhythm. */
+.section {
+  --navy: var(--primary, #0a2540);
+  --gold: var(--accent, #c9a84c);
+  --gold-ink: #876a1f;
+  --ink-2: #4a5b6c;
+  --rule: rgba(10, 37, 64, 0.14);
+  padding: 96px 40px;
+  color: var(--navy);
+  scroll-margin-top: 90px;
+}
+.paper { background: #f5f7fa; }
+.inner { max-width: 1200px; margin-inline: auto; }
+
+.head {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--navy);
+  margin-bottom: 56px;
+}
+.index {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+}
+.index b {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+.title {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(30px, 3.6vw, 48px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  max-width: 18ch;
+}
+.lede {
+  margin-top: 18px;
+  max-width: 58ch;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+@media (max-width: 860px) {
+  .section { padding: 64px 20px; }
+  .head { grid-template-columns: 1fr; gap: 14px; margin-bottom: 36px; }
+}

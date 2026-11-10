@@ -1,145 +1,93 @@
-// components/MembershipCategoriesSection/MembershipCategoriesSection.tsx
-import React from "react";
+import { Link } from "react-router-dom";
+import shared from "../aboutShared.module.css";
 import styles from "./MembershipCategoriesSection.module.css";
+import { MEMBERSHIP_DUES, formatDues } from "../../../../constants/Membership";
 
-const MembershipCategoriesSection: React.FC = () => {
+type Tier = {
+  key: string;
+  name: string;
+  who: string;
+  benefits: string[];
+  note?: string;
+  price: string;
+  priceNote?: string;
+  cta?: string;
+  footnote?: string;
+  variant?: "honorary";
+};
+
+const tiers: Tier[] = [
+  {
+    key: "full",
+    name: "Full Member",
+    who: "Open to all graduates of Nigeria Maritime University, Okerenkoko who have successfully completed a recognised degree or postgraduate programme.",
+    benefits: ["Vote in elections", "Contest elected offices", "Access welfare benefits", "Receive official communications"],
+    price: formatDues(MEMBERSHIP_DUES.Full.NGN, "NGN"),
+    priceNote: `or USD ${MEMBERSHIP_DUES.Full.USD} for diaspora members`,
+    cta: "Join as a Full Member",
+  },
+  {
+    key: "associate",
+    name: "Associate Member",
+    who: "Open to former academic and administrative staff of NMU, industry experts with sustained engagement with the University, and persons who completed non-degree programmes.",
+    benefits: ["Receive official communications", "Attend association events", "Contribute to the network"],
+    note: "Cannot vote or contest elections.",
+    price: formatDues(MEMBERSHIP_DUES.Associate.NGN, "NGN"),
+    cta: "Join as an Associate",
+  },
+  {
+    key: "honorary",
+    name: "Honorary Member",
+    who: "Conferred by the National General Assembly upon persons of distinguished repute who have rendered exceptional service to maritime education, the maritime industry, or the NMUAA.",
+    benefits: ["Participate in events and network", "Exempt from annual dues", "Honorary recognition"],
+    note: "Cannot vote or contest elections.",
+    price: "Exempt",
+    footnote: "Conferred by NGA resolution. Not open to application.",
+    variant: "honorary",
+  },
+];
+
+const MembershipCategoriesSection = () => {
   return (
-    <section className={styles.section}>
-      <div className={styles.container}>
-        {/* ---------- heading ---------- */}
-        <div className={styles.header}>
-          <span className={styles.kicker}>JOIN THE NETWORK</span>
-          <h2 className={styles.title}>Membership Categories</h2>
-          <p className={styles.subtitle}>
-            NMUAA membership is open to all NMU graduates, former staff, and
-            distinguished individuals who share our commitment to maritime
-            excellence.
-          </p>
-        </div>
-
-        {/* ---------- cards ---------- */}
-        <div className={styles.grid}>
-          {/* FULL MEMBER */}
-          <article className={`${styles.card} ${styles.fullCard}`}>
-            <div className={`${styles.topLine} ${styles.topLineNavy}`} />
-
-            <div className={`${styles.badge} ${styles.badgeLight}`}>
-              FULL MEMBERSHIP
-            </div>
-
-            <h3 className={styles.cardTitle}>Full Member</h3>
-
-            <p className={styles.cardDescription}>
-              Open to all graduates of Nigeria Maritime University, Okerenkoko
-              who have successfully completed a recognised degree or
-              postgraduate programme.
+    <section id="membership" className={`${shared.section} ${shared.paper}`} aria-labelledby="membership-title">
+      <div className={shared.inner}>
+        <header className={shared.head}>
+          <span className={shared.index}><b>04</b>Join the network</span>
+          <div>
+            <h2 id="membership-title" className={shared.title}>Membership categories</h2>
+            <p className={shared.lede}>
+              Membership is open to all NMU graduates, former staff, and distinguished individuals who share
+              our commitment to maritime excellence.
             </p>
+          </div>
+        </header>
 
-            <div className={styles.listHeading}>RIGHTS &amp; BENEFITS</div>
+        <div className={styles.table}>
+          {tiers.map((t) => (
+            <article key={t.key} className={`${styles.tier} ${t.variant === "honorary" ? styles.honorary : ""}`}>
+              <h3>{t.name}</h3>
+              <p className={styles.who}>{t.who}</p>
 
-            <ul className={`${styles.list} ${styles.goldBullets}`}>
-              <li>Vote in elections</li>
-              <li>Contest elected offices</li>
-              <li>Access welfare benefits</li>
-              <li>Receive official communications</li>
-            </ul>
-
-            <div className={styles.priceBox}>
-              <div className={styles.priceLabel}>Annual Subscription:</div>
-              <div className={styles.priceRow}>
-                <span className={styles.priceMain}>₦30,000</span>
-                <span className={styles.priceExtra}>/ USD 50 (Diaspora)</span>
+              <div className={styles.price}>
+                <span className={styles.priceLabel}>Annual dues</span>
+                <strong>{t.price}</strong>
+                {t.priceNote && <small>{t.priceNote}</small>}
               </div>
-            </div>
 
-            <button className={`${styles.ctaButton} ${styles.ctaNavy}`}>
-              Join as Full Member <span aria-hidden="true">→</span>
-            </button>
-          </article>
+              <ul className={styles.benefits}>
+                {t.benefits.map((b) => <li key={b}>{b}</li>)}
+              </ul>
+              {t.note && <p className={styles.note}>{t.note}</p>}
 
-          {/* ASSOCIATE MEMBER */}
-          <article className={`${styles.card} ${styles.associateCard}`}>
-            <div className={`${styles.topLine} ${styles.topLineTeal}`} />
-
-            <div className={`${styles.badge} ${styles.badgeTeal}`}>
-              ASSOCIATE MEMBERSHIP
-            </div>
-
-            <h3 className={styles.cardTitle}>Associate Member</h3>
-
-            <p className={styles.cardDescription}>
-              Open to former academic and administrative staff of NMU, industry
-              experts with sustained engagement with the University, and persons
-              who completed non-degree programmes.
-            </p>
-
-            <div className={styles.listHeading}>RIGHTS &amp; BENEFITS</div>
-
-            <ul className={`${styles.list} ${styles.tealBullets}`}>
-              <li>Receive official communications</li>
-              <li>Attend association events</li>
-              <li>Contribute to the network</li>
-            </ul>
-
-            <p className={styles.note}>
-              Cannot vote or contest elections.
-            </p>
-
-            <div className={styles.priceBox}>
-              <div className={styles.priceLabel}>Annual Subscription:</div>
-              <div className={styles.priceRow}>
-                <span className={styles.priceMain}>₦20,000</span>
+              <div className={styles.action}>
+                {t.cta ? (
+                  <Link to="/register" className={styles.cta}>{t.cta}<span aria-hidden="true">→</span></Link>
+                ) : (
+                  <p className={styles.footnote}>{t.footnote}</p>
+                )}
               </div>
-            </div>
-
-            <button className={`${styles.ctaButton} ${styles.ctaTeal}`}>
-              Join as Associate Member <span aria-hidden="true">→</span>
-            </button>
-          </article>
-
-          {/* HONORARY MEMBER */}
-          <article className={`${styles.card} ${styles.honoraryCard}`}>
-            <div className={`${styles.topLine} ${styles.topLineGold}`} />
-
-            <div className={`${styles.badge} ${styles.badgeGold}`}>
-              HONORARY MEMBERSHIP
-            </div>
-
-            <h3 className={`${styles.cardTitle} ${styles.cardTitleLight}`}>
-              Honorary Member
-            </h3>
-
-            <p className={`${styles.cardDescription} ${styles.cardDescriptionLight}`}>
-              Conferred by the National General Assembly upon persons of
-              distinguished repute who have rendered exceptional service to
-              maritime education, the maritime industry, or the NMUAA.
-            </p>
-
-            <div className={`${styles.listHeading} ${styles.listHeadingGold}`}>
-              RIGHTS &amp; PRIVILEGES
-            </div>
-
-            <ul className={`${styles.list} ${styles.goldBulletsDark}`}>
-              <li>Participate in events and network</li>
-              <li>Exempt from annual dues</li>
-              <li>Honorary recognition</li>
-            </ul>
-
-            <p className={styles.noteDark}>
-              Cannot vote or contest elections.
-            </p>
-
-            <div className={styles.priceBoxDark}>
-              <div className={styles.priceLabelDark}>Annual Subscription:</div>
-              <div className={styles.priceRow}>
-                <span className={styles.priceGold}>Exempt</span>
-              </div>
-            </div>
-
-            <div className={styles.infoBoxDark}>
-              Conferred by NGA resolution. Not a self-application.
-            </div>
-          </article>
+            </article>
+          ))}
         </div>
       </div>
     </section>

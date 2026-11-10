@@ -64,23 +64,23 @@
 .searchInput {
   width: 100%;
   padding: 0.7rem 1rem 0.7rem 2.6rem;
-  border: 1px solid var(--muted);
-  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
   font-size: 1rem;
   background: var(--background);
 }
 
 .searchInput:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.2);
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
   background: var(--card);
 }
 
 .select {
   padding: 0.7rem 0.9rem;
-  border: 1px solid var(--muted);
-  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
   font-size: 0.9rem;
   background: var(--card);
   color: var(--foreground);
@@ -90,8 +90,7 @@
 
 .select:focus {
   outline: none;
-  border-color: var(--accent);
-}
+  border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
 
 .meta {
   max-width: 1200px;

@@ -25,6 +25,8 @@
   --border: rgba(10, 37, 64, 0.1);
   --input: transparent;
   --input-background: #ffffff;
+  --input-border: #c3ccd6;
+  --input-border-hover: #8796a7;
   --switch-background: #cbced4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -163,6 +165,14 @@ input, textarea, select {
   font-family: inherit;
   font-size: 1rem;
 }
+
+/* Fields: crisp 1px edge, darker on hover, solid navy edge on focus (no glow). */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):hover:not(:focus):not(:disabled),
+textarea:hover:not(:focus):not(:disabled),
+select:hover:not(:focus):not(:disabled) {
+  border-color: var(--input-border-hover);
+}
+input::placeholder, textarea::placeholder { color: #8a96a4; }
 
 /* ====================== Utility ====================== */
 .rounded-theme {

@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import styles from "./Profile.module.css";
 import { useAuth } from "../../context/auth/useAuth";
-import { DISCIPLINES, GRADUATION_YEARS } from "../../constants/Disciplines";
+import { DISCIPLINES, DISCIPLINE_GROUPS, GRADUATION_YEARS } from "../../constants/Disciplines";
 import {
   getRequestsForMentor,
   getRequestsForUser,
@@ -23,6 +23,7 @@ import {
 } from "../../components/pages/mentorship-comps/mentor-list/mentorRequestsStore";
 import { MENTORS } from "../../components/pages/mentorship-comps/mentor-list/mentorsData";
 import { resizeImageFile } from "../../utils/resizeImage";
+import DemoMembership from "./DemoMembership";
 
 const initials = (name: string) =>
   name
@@ -241,10 +242,12 @@ const Profile = () => {
                         setForm({ ...form, discipline: e.target.value })
                       }
                     >
-                      {DISCIPLINES.map((d) => (
-                        <option key={d} value={d}>
-                          {d}
-                        </option>
+                      {DISCIPLINE_GROUPS.map((g) => (
+                        <optgroup key={g.faculty} label={g.faculty}>
+                          {g.programmes.map((d) => (
+                            <option key={d} value={d}>{d}</option>
+                          ))}
+                        </optgroup>
                       ))}
                     </select>
                   </div>
@@ -531,6 +534,9 @@ const Profile = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div style={{ marginTop: "2rem" }}>
+          <DemoMembership />
         </div>
       </div>
     </div>

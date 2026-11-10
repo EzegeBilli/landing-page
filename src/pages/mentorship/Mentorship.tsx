@@ -160,7 +160,7 @@ const Mentorship = () => {
                 All Disciplines
                 <span className={styles.count}>{disciplineCounts.all}</span>
               </button>
-              {DISCIPLINES.map((d) => (
+              {DISCIPLINES.filter((d) => disciplineCounts[d] > 0 || d === discipline).map((d) => (
                 <button
                   key={d}
                   type="button"

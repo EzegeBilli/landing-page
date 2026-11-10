@@ -57,6 +57,13 @@
   color: var(--accent);
 }
 
+.brandLogo { height: 48px; width: auto; max-width: 150px; object-fit: contain; background: white; border-radius: 6px; padding: 6px 10px; }
+@media (min-width: 961px) {
+  /* 100vh is taller than the visible viewport on many browsers; let the grid row size the panel. */
+  .panel { min-height: 0; }
+  .content { min-height: 0; height: 100%; gap: 24px; padding: clamp(24px, 4vh, 48px); }
+}
+
 .textBlock {
   position: relative;
   min-height: 9rem;

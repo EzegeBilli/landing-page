@@ -170,8 +170,8 @@
 .inputWrap select {
   width: 100%;
   padding: 0.85rem 1rem 0.85rem 2.6rem;
-  border: 1.5px solid var(--muted);
-  border-radius: 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
   font-size: 0.95rem;
   background: var(--background);
   color: var(--foreground);
@@ -185,8 +185,8 @@
 .inputWrap input:focus,
 .inputWrap select:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.15);
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
   background: var(--card);
 }
 
@@ -263,6 +263,22 @@
 .link:hover {
   text-decoration: underline;
 }
+
+.resendBtn {
+  align-self: flex-start;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--teal);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.resendBtn:hover:not(:disabled) { text-decoration: underline; }
+.resendBtn:disabled { color: var(--muted-foreground); cursor: not-allowed; }
+.resendBtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.resendFeedback { color: var(--muted-foreground); font-size: 0.85rem; line-height: 1.6; }
 
 @media (max-width: 480px) {
   .row {

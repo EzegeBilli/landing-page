@@ -32,7 +32,7 @@ export const MENTORS: MentorProfile[] = [
     name: "Dr. Olayinka Adeyemi",
     photo:
       "https://images.unsplash.com/photo-1554765345-6ad6a5417cde?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    discipline: "B.Sc. Marine Economics",
+    discipline: "B.Sc. Marine Economics & Finance",
     role: "Port Operations Manager",
     company: "Apapa Port Complex",
     graduationYear: "2021",
@@ -45,7 +45,7 @@ export const MENTORS: MentorProfile[] = [
     name: "Aisha Mohammed",
     photo:
       "https://images.unsplash.com/photo-1649589244330-09ca58e4fa64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600",
-    discipline: "B.Sc. Meteorology",
+    discipline: "B.Sc. Meteorology & Climate Change",
     role: "Climate Researcher",
     company: "NIMET",
     graduationYear: "2024",
