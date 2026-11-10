@@ -1,3 +1,5 @@
+import { ApiError, apiRequest, baseUrl } from "./client";
+
 export interface RegistrationPayload {
   fullName: string;
   email: string;
@@ -8,15 +10,25 @@ export interface RegistrationPayload {
   graduationYear?: number;
 }
 
+/** Shape returned by GET /api/auth/me (nullable fields are `null` when unset). */
 export interface BackendUser {
   id?: string;
   _id?: string;
   fullName: string;
   email: string;
   userType?: "alumni" | "staff";
-  graduationYear?: number;
-  department?: string;
-  phone?: string;
+  membershipType?: string;
+  graduationYear?: number | null;
+  department?: string | null;
+  faculty?: string | null;
+  phone?: string | null;
+  currentRole?: string | null;
+  company?: string | null;
+  location?: string | null;
+  bio?: string | null;
+  avatarUrl?: string | null;
+  isMentor?: boolean;
+  mentorExpertise?: string[];
   createdAt?: string;
 }
 interface ApiResponse {
@@ -25,17 +37,7 @@ interface ApiResponse {
   data?: BackendUser;
 }
 
-export class AuthApiError extends Error {
-  status: number;
-  constructor(message: string, status: number) { super(message); this.status = status; }
-}
-
-// Accept an origin or a base URL already ending in /api.
-// Never fall back to localhost in production builds: browsers treat that as a
-// local-network request (permission prompt + CORS failure) on the live site.
-const baseUrl = (import.meta.env.VITE_API_BASE_URL
-  || (import.meta.env.DEV ? "http://localhost:5000" : "https://alumni-backend-y1vu.onrender.com"))
-  .replace(/\/+$/, "").replace(/\/api$/, "");
+export { ApiError as AuthApiError };
 
 async function postAuth(path: string, payload: object): Promise<ApiResponse> {
   let response: Response;
@@ -48,12 +50,12 @@ async function postAuth(path: string, payload: object): Promise<ApiResponse> {
       signal: AbortSignal.timeout(20000),
     });
   } catch {
-    throw new Error("Could not reach the server. Check your connection and try again.");
+    throw new ApiError("Could not reach the server. Check your connection and try again.", 0);
   }
   const body: unknown = await response.json().catch(() => null);
   const result = body && typeof body === "object" ? body as Partial<ApiResponse> : null;
   if (!response.ok || result?.success !== true) {
-    throw new AuthApiError(typeof result?.message === "string" ? result.message : `Request failed (${response.status}). Please try again.`, response.status);
+    throw new ApiError(typeof result?.message === "string" ? result.message : `Request failed (${response.status}). Please try again.`, response.status);
   }
   return result as ApiResponse;
 }
@@ -63,9 +65,9 @@ export const verifyEmail = (payload: { email: string; otp: string }) => postAuth
 export const resendOtp = (payload: { email: string }) => postAuth("resend-otp", payload);
 export const loginAccount = (payload: { email: string; password: string }) => postAuth("login", payload);
 export const logoutAccount = () => postAuth("logout", {});
+/** Current session profile. Refreshes an expired access token once before giving up. */
 export async function getCurrentUser(): Promise<BackendUser> {
-  const response = await fetch(`${baseUrl}/api/auth/me`, { credentials: "include", signal: AbortSignal.timeout(20000) });
-  const result = await response.json();
-  if (!response.ok || !result.success || !result.data) throw new Error("Session unavailable");
-  return result.data;
+  const { data } = await apiRequest<BackendUser | undefined>("/auth/me");
+  if (!data) throw new ApiError("Session unavailable", 401);
+  return data;
 }

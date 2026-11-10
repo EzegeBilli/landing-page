@@ -323,3 +323,101 @@
   color: var(--muted-foreground);
   cursor: default;
 }
+
+/* ---------- search, pagination, request states ---------- */
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 420px;
+  margin-bottom: 1.75rem;
+  padding: 0 0.85rem;
+  border: 1px solid var(--muted);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted-foreground);
+}
+
+.searchBox:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.2);
+}
+
+.searchBox input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.65rem 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--foreground);
+  outline: none;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.retryBtn {
+  margin-top: 0.75rem;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--muted);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--foreground);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  font-size: 0.88rem;
+  color: var(--muted-foreground);
+}
+
+.pager button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--muted);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--foreground);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pager button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.charCount {
+  margin: 0.35rem 0 0;
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.modalError {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: var(--destructive);
+}
+
+.cancelBtn:disabled,
+.modalClose:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -152,21 +152,6 @@ export interface MentorProfile {
   isMember?: boolean;
 }
 
-export type MentorRequestStatus = "Pending" | "Accepted" | "Declined";
-
-export interface MentorRequest {
-  id: string;
-  mentorId: string;
-  mentorName: string;
-  mentorEmail?: string;
-  requesterId: string;
-  requesterName: string;
-  requesterEmail: string;
-  message: string;
-  status: MentorRequestStatus;
-  createdAt: string;
-}
-
 /* ========== Alumni Directory ========== */
 
 export interface DirectoryAlumnus {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { AuthUser, PublicProfile } from "../../types";
 import {
   getSessionUserId,
@@ -7,16 +7,38 @@ import {
   saveUsers,
   setSessionUserId,
 } from "./authStorage";
-import { AuthContext, type AuthContextValue } from "./authContextDef";
+import { AuthContext, type ActionResult, type AuthContextValue } from "./authContextDef";
 import { toast } from "../../components/toast/toast";
 import { AuthApiError, getCurrentUser, loginAccount, logoutAccount, type BackendUser } from "../../api/auth";
+import { SESSION_EXPIRED_EVENT } from "../../api/client";
+import {
+  updateMyMentorSettings,
+  updateMyProfile,
+  uploadMyAvatar,
+} from "../../api/profile";
+import { profilePatch } from "../../api/profilePatch";
 
 function backendProfile(user: BackendUser): PublicProfile {
   const id = user.id || user._id;
   if (!id || !user.email || !user.fullName) throw new Error("Invalid login response. Please try again.");
-  return { id, fullName: user.fullName, email: user.email, memberType: user.userType === "staff" ? "Staff" : "Alumnus",
-    graduationYear: user.graduationYear ? String(user.graduationYear) : "", discipline: user.department || "",
-    phone: user.phone, createdAt: user.createdAt || "" };
+  return {
+    id,
+    fullName: user.fullName,
+    email: user.email,
+    memberType: user.userType === "staff" ? "Staff" : "Alumnus",
+    // Backend `department` is shown as the frontend's "discipline".
+    discipline: user.department || "",
+    graduationYear: user.graduationYear ? String(user.graduationYear) : "",
+    phone: user.phone ?? undefined,
+    currentRole: user.currentRole ?? undefined,
+    company: user.company ?? undefined,
+    location: user.location ?? undefined,
+    bio: user.bio ?? undefined,
+    avatar: user.avatarUrl ?? undefined,
+    isMentor: user.isMentor ?? false,
+    mentorExpertise: user.mentorExpertise ?? [],
+    createdAt: user.createdAt || "",
+  };
 }
 
 function toPublicProfile(user: AuthUser): PublicProfile {
@@ -24,6 +46,9 @@ function toPublicProfile(user: AuthUser): PublicProfile {
   delete publicProfile.passwordHash;
   return publicProfile as PublicProfile;
 }
+
+const errorMessage = (error: unknown, fallback: string) =>
+  error instanceof Error && error.message ? error.message : fallback;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [backendUser, setBackendUser] = useState<PublicProfile | null>(null);
@@ -43,6 +68,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     saveUsers(users);
   }, [users]);
+
+  // Any API call that still gets 401 after a token refresh lands here.
+  const backendUserRef = useRef(backendUser);
+  useEffect(() => { backendUserRef.current = backendUser; }, [backendUser]);
+  useEffect(() => {
+    const onExpired = () => {
+      if (!backendUserRef.current) return;
+      backendUserRef.current = null;
+      setBackendUser(null);
+      toast.error("Your session has expired. Please log in again.");
+    };
+    window.addEventListener(SESSION_EXPIRED_EVENT, onExpired);
+    return () => window.removeEventListener(SESSION_EXPIRED_EVENT, onExpired);
+  }, []);
 
   const user = useMemo(() => {
     const found = users.find((u) => u.id === sessionUserId);
@@ -128,18 +167,68 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
   };
 
-  const getMentorUsers = () =>
-    users.filter((u) => u.isMentor).map(toPublicProfile);
+  const refreshUser = useCallback(async () => {
+    const profile = await getCurrentUser();
+    setBackendUser(backendProfile(profile));
+  }, []);
+
+  /** Runs a backend write, then reloads the profile so the UI shows what was persisted. */
+  const persist = async (write: () => Promise<unknown>, fallback: string): Promise<ActionResult> => {
+    try {
+      await write();
+    } catch (error) {
+      return { ok: false, error: errorMessage(error, fallback) };
+    }
+    try {
+      await refreshUser();
+    } catch {
+      // The write succeeded; a failed reload only means the view may lag until the next load.
+    }
+    return { ok: true };
+  };
+
+  const saveProfile: AuthContextValue["saveProfile"] = async (values) => {
+    if (!backendUser) {
+      updateProfile({ ...values, fullName: values.fullName.trim() });
+      return { ok: true };
+    }
+    if (values.fullName.trim().length < 2) {
+      return { ok: false, error: "Full name must be at least 2 characters." };
+    }
+    const patch = profilePatch(backendUser, values);
+    if (Object.keys(patch).length === 0) return { ok: true };
+    return persist(() => updateMyProfile(patch), "Could not save your profile. Please try again.");
+  };
+
+  const saveAvatar: AuthContextValue["saveAvatar"] = async (dataUrl) => {
+    if (!backendUser) {
+      updateProfile({ avatar: dataUrl });
+      return { ok: true };
+    }
+    return persist(() => uploadMyAvatar(dataUrl), "Could not upload your photo. Please try again.");
+  };
+
+  const saveMentorSettings: AuthContextValue["saveMentorSettings"] = async (settings) => {
+    if (!backendUser) {
+      updateProfile(settings);
+      return { ok: true };
+    }
+    return persist(() => updateMyMentorSettings(settings), "Could not save your mentor settings. Please try again.");
+  };
 
   const value: AuthContextValue = {
     user,
     isAuthenticated: !!user,
+    isDemo: !!user && !backendUser,
     isLoading,
     register,
     login,
     logout,
     updateProfile,
-    getMentorUsers,
+    refreshUser,
+    saveProfile,
+    saveAvatar,
+    saveMentorSettings,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,12 +1,8 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import ts from "typescript";
+import { loadTsModule } from "./load-ts-module.mjs";
 
-const source = await readFile(new URL("../src/api/auth.ts", import.meta.url), "utf8");
-const compiled = ts.transpileModule(source.replace("import.meta.env.VITE_API_BASE_URL", '"http://localhost:5000/api/"'), {
-  compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
-}).outputText;
-const { registerAccount, verifyEmail, resendOtp, loginAccount, getCurrentUser, logoutAccount, AuthApiError } = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`);
+globalThis.window ??= new EventTarget();
+const { registerAccount, verifyEmail, resendOtp, loginAccount, getCurrentUser, logoutAccount, AuthApiError } = await import(await loadTsModule("src/api/auth.ts"));
 const originalFetch = globalThis.fetch;
 try {
   const payload = { fullName: "Test Member", email: "test@example.com", password: "Example123!", userType: "alumni", membershipType: "full", graduationYear: 2024 };
