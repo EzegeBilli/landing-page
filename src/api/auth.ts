@@ -31,7 +31,10 @@ export class AuthApiError extends Error {
 }
 
 // Accept an origin or a base URL already ending in /api.
-const baseUrl = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000")
+// Never fall back to localhost in production builds: browsers treat that as a
+// local-network request (permission prompt + CORS failure) on the live site.
+const baseUrl = (import.meta.env.VITE_API_BASE_URL
+  || (import.meta.env.DEV ? "http://localhost:5000" : "https://alumni-backend-y1vu.onrender.com"))
   .replace(/\/+$/, "").replace(/\/api$/, "");
 
 async function postAuth(path: string, payload: object): Promise<ApiResponse> {
