@@ -72,7 +72,8 @@ export interface ReceivedRequest {
 }
 
 export const listMentors = (filters: MentorFilters = {}) =>
-  apiRequest<{ items: ApiMentor[]; pagination: Pagination }>("/mentors", { query: { ...filters } })
+  // Public endpoint: no Bearer token, no refresh.
+  apiRequest<{ items: ApiMentor[]; pagination: Pagination }>("/mentors", { query: { ...filters }, auth: false })
     .then(({ data }) => data);
 
 export const sendMentorshipRequest = (payload: { mentorId: string; message: string; focusArea?: string }) =>

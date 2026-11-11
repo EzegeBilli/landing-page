@@ -1,4 +1,4 @@
-import { ApiError, apiRequest, baseUrl } from "./client";
+import { ApiError, apiRequest, refreshSession, setAccessToken } from "./client";
 
 export interface RegistrationPayload {
   fullName: string;
@@ -31,43 +31,80 @@ export interface BackendUser {
   mentorExpertise?: string[];
   createdAt?: string;
 }
-interface ApiResponse {
-  success: boolean;
+
+/**
+ * POST /api/auth/login `data`: the account under `user`, the access JWT, its
+ * lifetime in seconds, and (for compatibility) the same account fields flat.
+ */
+interface LoginData extends Partial<BackendUser> {
+  user?: BackendUser;
+  accessToken?: unknown;
+  expiresIn?: number;
+}
+
+interface AuthResponse<T> {
+  success: true;
   message: string;
-  data?: BackendUser;
+  data?: T;
 }
 
 export { ApiError as AuthApiError };
 
-async function postAuth(path: string, payload: object): Promise<ApiResponse> {
-  let response: Response;
-  try {
-    response = await fetch(`${baseUrl}/api/auth/${path}`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(20000),
-    });
-  } catch {
-    throw new ApiError("Could not reach the server. Check your connection and try again.", 0);
-  }
-  const body: unknown = await response.json().catch(() => null);
-  const result = body && typeof body === "object" ? body as Partial<ApiResponse> : null;
-  if (!response.ok || result?.success !== true) {
-    throw new ApiError(typeof result?.message === "string" ? result.message : `Request failed (${response.status}). Please try again.`, response.status);
-  }
-  return result as ApiResponse;
+/** Unauthenticated auth call: no Bearer token and no refresh on 401 (e.g. wrong password). */
+async function postAuth<T = BackendUser>(path: string, payload: object, withCredentials = false): Promise<AuthResponse<T>> {
+  const { message, data } = await apiRequest<T | undefined>(`/auth/${path}`, {
+    method: "POST",
+    body: payload,
+    auth: false,
+    withCredentials,
+  });
+  return { success: true, message, data };
 }
 
 export const registerAccount = (payload: RegistrationPayload) => postAuth("register", payload);
 export const verifyEmail = (payload: { email: string; otp: string }) => postAuth("verify-email", payload);
 export const resendOtp = (payload: { email: string }) => postAuth("resend-otp", payload);
-export const loginAccount = (payload: { email: string; password: string }) => postAuth("login", payload);
-export const logoutAccount = () => postAuth("logout", {});
-/** Current session profile. Refreshes an expired access token once before giving up. */
+
+/**
+ * Logs in, keeps the access token in memory and returns the account. Sent with
+ * credentials so the browser stores the HttpOnly refresh cookie.
+ */
+export async function loginAccount(payload: { email: string; password: string }): Promise<AuthResponse<BackendUser>> {
+  const response = await postAuth<LoginData>("login", payload, true);
+  const data = response.data;
+  if (typeof data?.accessToken !== "string" || !data.accessToken) {
+    throw new ApiError("Login failed: the server did not return an access token. Please try again.", 500);
+  }
+  setAccessToken(data.accessToken);
+  const user = data.user ?? (data as BackendUser);
+  return { ...response, data: user };
+}
+
+/**
+ * Revokes the refresh session server-side and clears cookies. The in-memory
+ * access token is cleared whether or not the server could be reached.
+ */
+export async function logoutAccount(): Promise<AuthResponse<unknown>> {
+  try {
+    return await postAuth<unknown>("logout", {}, true);
+  } finally {
+    setAccessToken(null);
+  }
+}
+
+/** Current session profile (Bearer). Refreshes an expired access token once before giving up. */
 export async function getCurrentUser(): Promise<BackendUser> {
   const { data } = await apiRequest<BackendUser | undefined>("/auth/me");
   if (!data) throw new ApiError("Session unavailable", 401);
   return data;
+}
+
+/**
+ * Restores a session after a page load: trades the HttpOnly refresh cookie for a
+ * new access token, then loads the user. Returns null when there's no session.
+ */
+export async function restoreSession(): Promise<BackendUser | null> {
+  const result = await refreshSession();
+  if (result !== "ok") return null;
+  return getCurrentUser();
 }

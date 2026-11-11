@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import type { AuthUser, PublicProfile } from "../../types";
 import {
   getSessionUserId,
@@ -9,8 +10,8 @@ import {
 } from "./authStorage";
 import { AuthContext, type ActionResult, type AuthContextValue } from "./authContextDef";
 import { toast } from "../../components/toast/toast";
-import { AuthApiError, getCurrentUser, loginAccount, logoutAccount, type BackendUser } from "../../api/auth";
-import { SESSION_EXPIRED_EVENT } from "../../api/client";
+import { AuthApiError, getCurrentUser, loginAccount, logoutAccount, restoreSession, type BackendUser } from "../../api/auth";
+import { SESSION_EXPIRED_EVENT, setAccessToken } from "../../api/client";
 import {
   updateMyMentorSettings,
   updateMyProfile,
@@ -51,12 +52,16 @@ const errorMessage = (error: unknown, fallback: string) =>
   error instanceof Error && error.message ? error.message : fallback;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient();
   const [backendUser, setBackendUser] = useState<PublicProfile | null>(null);
+  // Protected routes show a loading state until session restoration settles.
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
+    // The access token lives only in memory, so after a page load it is gone:
+    // trade the HttpOnly refresh cookie for a new one, then load the user.
     let active = true;
-    getCurrentUser().then(value => { if (active) setBackendUser(backendProfile(value)); })
-      .catch(() => { /* No active backend session; demo login remains available. */ })
+    restoreSession().then(value => { if (active && value) setBackendUser(backendProfile(value)); })
+      .catch(() => { /* No restorable backend session; demo login remains available. */ })
       .finally(() => { if (active) setIsLoading(false); });
     return () => { active = false; };
   }, []);
@@ -69,19 +74,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     saveUsers(users);
   }, [users]);
 
-  // Any API call that still gets 401 after a token refresh lands here.
   const backendUserRef = useRef(backendUser);
   useEffect(() => { backendUserRef.current = backendUser; }, [backendUser]);
+
+  /** Forgets the backend session locally: access token, user and per-user cached data. */
+  const clearBackendSession = useCallback(() => {
+    setAccessToken(null);
+    backendUserRef.current = null;
+    setBackendUser(null);
+    queryClient.removeQueries({ queryKey: ["mentorship"] });
+  }, [queryClient]);
+
+  // Any API call that still gets 401 after a token refresh lands here.
+  // ProtectedRoute then redirects to /login.
   useEffect(() => {
     const onExpired = () => {
       if (!backendUserRef.current) return;
-      backendUserRef.current = null;
-      setBackendUser(null);
+      clearBackendSession();
       toast.error("Your session has expired. Please log in again.");
     };
     window.addEventListener(SESSION_EXPIRED_EVENT, onExpired);
     return () => window.removeEventListener(SESSION_EXPIRED_EVENT, onExpired);
-  }, []);
+  }, [clearBackendSession]);
 
   const user = useMemo(() => {
     const found = users.find((u) => u.id === sessionUserId);
@@ -142,19 +156,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { ok: false, error: "Incorrect email or password." };
     }
 
+    // Demo accounts never use backend authentication.
+    if (backendUserRef.current) clearBackendSession();
     setSessionUserId(found.id);
-    setBackendUser(null);
     setSessionUserIdState(found.id);
     return { ok: true };
   };
 
   const logout = () => {
     if (backendUser) {
-      void logoutAccount().then(() => {
-        setBackendUser(null); setSessionUserId(null); setSessionUserIdState(null);
-        toast.success("You’ve been logged out.");
-      }).catch(() => toast.error("Could not log out. Please check your connection and try again."));
-      return;
+      // Revoke the refresh session server-side, but sign out locally either way.
+      const serverLogout = logoutAccount();
+      clearBackendSession();
+      void serverLogout.then(
+        () => toast.success("You’ve been logged out."),
+        () => toast.error("You’re signed out on this device, but we couldn’t reach the server to end your session. It will expire on its own; log in and out again when you’re back online to end it now."),
+      );
     }
     setSessionUserId(null);
     setSessionUserIdState(null);

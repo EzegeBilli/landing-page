@@ -6,7 +6,7 @@ import { loadTsModule } from "./load-ts-module.mjs";
 globalThis.window ??= new EventTarget();
 const API = "http://localhost:5000/api";
 
-const { ApiError, SESSION_EXPIRED_EVENT } = await import(await loadTsModule("src/api/client.ts"));
+const { ApiError, SESSION_EXPIRED_EVENT, setAccessToken, hasAccessToken } = await import(await loadTsModule("src/api/client.ts"));
 const profile = await import(await loadTsModule("src/api/profile.ts"));
 const mentorship = await import(await loadTsModule("src/api/mentorship.ts"));
 const { profilePatch } = await import(await loadTsModule("src/api/profilePatch.ts"));
@@ -25,14 +25,18 @@ function mockFetch(...handlers) {
 }
 const ok = (data, message = "OK", status = 200) => () => Response.json({ success: true, message, data }, { status });
 const fail = (status, message, details) => () => Response.json({ success: false, message, details }, { status });
+const refreshed = (token) => ok({ refreshed: true, accessToken: token, expiresIn: 900 }, "Token refreshed");
+const bearer = (call) => call.options.headers?.Authorization;
 
 try {
-  // ---- Profile ----
+  // ---- Profile (Bearer-authenticated) ----
+  setAccessToken("jwt-1"); // as stored by a successful login
   let calls = mockFetch(ok({ _id: "u1" }, "Profile updated"));
   await profile.updateMyProfile({ fullName: "Ada Obi", graduationYear: 2022, bio: null });
   assert.equal(calls[0].url, `${API}/users/me`);
   assert.equal(calls[0].options.method, "PATCH");
-  assert.equal(calls[0].options.credentials, "include");
+  assert.equal(bearer(calls[0]), "Bearer jwt-1");
+  assert.notEqual(calls[0].options.credentials, "include", "protected requests use the header, not cookies");
   assert.equal(calls[0].options.headers["Content-Type"], "application/json");
   assert.deepEqual(calls[0].body, { fullName: "Ada Obi", graduationYear: 2022, bio: null });
 
@@ -40,6 +44,7 @@ try {
   const avatar = await profile.uploadMyAvatar("data:image/jpeg;base64,/9j/AA==");
   assert.equal(calls[0].url, `${API}/users/me/avatar`);
   assert.equal(calls[0].options.method, "POST");
+  assert.equal(bearer(calls[0]), "Bearer jwt-1");
   assert.deepEqual(calls[0].body, { data: "data:image/jpeg;base64,/9j/AA==" });
   assert.equal(avatar.data.avatarUrl, "https://res.cloudinary.com/x.jpg");
 
@@ -47,6 +52,7 @@ try {
   await profile.updateMyMentorSettings({ isMentor: true, mentorExpertise: ["Watchkeeping"] });
   assert.equal(calls[0].url, `${API}/users/me/mentor`);
   assert.equal(calls[0].options.method, "PATCH");
+  assert.equal(bearer(calls[0]), "Bearer jwt-1");
   assert.deepEqual(calls[0].body, { isMentor: true, mentorExpertise: ["Watchkeeping"] });
 
   // Zod validation errors are surfaced with their field messages.
@@ -69,29 +75,60 @@ try {
     assert.ok(!["email", "userType", "membershipType", "role", "avatarUrl", "isMentor"].includes(key));
   }
 
-  // ---- Session refresh ----
-  calls = mockFetch(fail(401, "Token expired"), ok({ refreshed: true }), ok({ items: [], pagination: { total: 0, page: 1, limit: 20, pages: 1 } }));
-  await mentorship.listMentors();
-  assert.deepEqual(calls.map((c) => c.url), [`${API}/mentors`, `${API}/auth/refresh`, `${API}/mentors`]);
+  // ---- Token expiry + refresh ----
+  // Expired token: refresh (cookie), store the new token, retry once with it.
+  setAccessToken("jwt-old");
+  calls = mockFetch(fail(401, "Token expired"), refreshed("jwt-new"), ok([]));
+  await mentorship.getSentRequests();
+  assert.deepEqual(calls.map((c) => c.url), [`${API}/mentorship/requests/sent`, `${API}/auth/refresh`, `${API}/mentorship/requests/sent`]);
+  assert.equal(bearer(calls[0]), "Bearer jwt-old");
   assert.equal(calls[1].options.method, "POST");
   assert.equal(calls[1].options.credentials, "include");
+  assert.equal(bearer(calls[1]), undefined, "refresh relies on the cookie only");
+  assert.equal(bearer(calls[2]), "Bearer jwt-new");
 
+  // Failed refresh: token cleared, session-expired event, no further retries.
   let expired = 0;
   window.addEventListener(SESSION_EXPIRED_EVENT, () => { expired += 1; });
-  mockFetch(fail(401, "Token expired"), fail(401, "Invalid refresh token"));
+  calls = mockFetch(fail(401, "Token expired"), fail(401, "Refresh session is expired or has already been used"));
   await assert.rejects(mentorship.getSentRequests(), (error) => error instanceof ApiError && error.status === 401 && /session has expired/.test(error.message));
+  assert.equal(calls.length, 2);
   assert.equal(expired, 1);
+  assert.equal(hasAccessToken(), false);
 
-  // Concurrent 401s share a single refresh call.
-  calls = mockFetch(fail(401, "x"), fail(401, "x"), ok({ refreshed: true }), ok([]), ok([]));
+  // Retried request still 401: give up after one retry (no loop).
+  setAccessToken("jwt-a");
+  calls = mockFetch(fail(401, "x"), refreshed("jwt-b"), fail(401, "x"));
+  await assert.rejects(mentorship.getReceivedRequests(), /session has expired/);
+  assert.equal(calls.length, 3);
+  assert.equal(expired, 2);
+
+  // Server unreachable during refresh: a network error, not a sign-out.
+  setAccessToken("jwt-c");
+  mockFetch(fail(401, "x"), () => { throw new TypeError("Failed to fetch"); });
+  await assert.rejects(mentorship.getSentRequests(), (error) => error instanceof ApiError && error.status === 0);
+  assert.equal(expired, 2);
+
+  // Concurrent 401s share a single refresh, and both retry with the new token.
+  setAccessToken("jwt-d");
+  calls = mockFetch(fail(401, "x"), fail(401, "x"), refreshed("jwt-e"), ok([]), ok([]));
   await Promise.all([mentorship.getSentRequests(), mentorship.getReceivedRequests()]);
   assert.equal(calls.filter((c) => c.url.endsWith("/auth/refresh")).length, 1);
+  assert.deepEqual(calls.slice(3).map(bearer), ["Bearer jwt-e", "Bearer jwt-e"]);
+
+  // A request that failed with a token already replaced in flight retries without refreshing.
+  setAccessToken("jwt-f");
+  calls = mockFetch(() => { setAccessToken("jwt-g"); return fail(401, "x")(); }, ok([]));
+  await mentorship.getSentRequests();
+  assert.deepEqual(calls.map((c) => c.url), [`${API}/mentorship/requests/sent`, `${API}/mentorship/requests/sent`]);
+  assert.equal(bearer(calls[1]), "Bearer jwt-g");
 
   // ---- Mentor discovery ----
   const mentor = { id: "a".repeat(24), fullName: "Capt. Bello", avatarUrl: null, currentRole: "Master", company: null, location: "Lagos", department: "B.Sc. Nautical Science", discipline: "B.Sc. Nautical Science", faculty: null, graduationYear: 2020, bio: null, linkedin: null, mentorExpertise: ["Watchkeeping"] };
   calls = mockFetch(ok({ items: [mentor], pagination: { total: 1, page: 2, limit: 12, pages: 3 } }, "Mentors retrieved"));
   const result = await mentorship.listMentors({ department: "B.Sc. Nautical Science", search: "", expertise: undefined, page: 2, limit: 12 });
   const query = new URL(calls[0].url).searchParams;
+  assert.equal(bearer(calls[0]), undefined, "public endpoint: no token sent");
   assert.equal(query.get("department"), "B.Sc. Nautical Science");
   assert.equal(query.get("page"), "2");
   assert.equal(query.get("limit"), "12");
@@ -105,6 +142,7 @@ try {
   calls = mockFetch(ok({ _id: "r1", status: "pending" }, "Mentorship request sent", 201));
   await mentorship.sendMentorshipRequest({ mentorId: mentor.id, message: "I would like guidance." });
   assert.equal(calls[0].url, `${API}/mentorship/requests`);
+  assert.equal(bearer(calls[0]), "Bearer jwt-g");
   assert.equal(calls[0].options.method, "POST");
   assert.deepEqual(calls[0].body, { mentorId: mentor.id, message: "I would like guidance." });
 
@@ -127,6 +165,7 @@ try {
   await mentorship.respondToRequest("r1", "accepted");
   assert.equal(calls[0].url, `${API}/mentorship/requests/r1`);
   assert.equal(calls[0].options.method, "PATCH");
+  assert.equal(bearer(calls[0]), "Bearer jwt-g");
   assert.deepEqual(calls[0].body, { status: "accepted" });
 
   mockFetch(fail(403, "Only the mentor can respond to this request"));
@@ -143,7 +182,7 @@ try {
   assert.equal(mentorship.retryUnlessClientError(0, new ApiError("x", 503)), true);
   assert.equal(mentorship.retryUnlessClientError(2, new ApiError("x", 0)), false);
 
-  console.log("Profile & mentorship API checks passed: profile/avatar/mentor writes, field conversion, validation errors, token refresh, session expiry, discovery filters, requests, statuses, and contact privacy.");
+  console.log("Profile & mentorship API checks passed (mocked): Bearer header on profile/avatar/mentor writes, field conversion, validation errors, token refresh + single retry, failed refresh, concurrent 401s, network errors, discovery filters, requests, statuses, and contact privacy.");
 } finally {
   globalThis.fetch = originalFetch;
 }
