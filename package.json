@@ -7,9 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test": "node scripts/test-auth-api.mjs && node scripts/test-profile-mentorship-api.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.106.1",
     "lucide-react": "^1.17.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

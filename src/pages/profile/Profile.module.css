@@ -250,8 +250,8 @@
 .field select,
 .field textarea {
   padding: 0.6rem 0.8rem;
-  border: 1px solid var(--muted);
-  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
   font-size: 0.9rem;
   background: var(--background);
   color: var(--foreground);
@@ -263,8 +263,8 @@
 .field select:focus,
 .field textarea:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.2);
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
   background: var(--card);
 }
 
@@ -531,4 +531,30 @@
   .logoutBtn {
     margin-left: 0;
   }
+}
+
+/* ---------- backend states ---------- */
+.formError {
+  font-size: 0.85rem;
+  color: var(--destructive);
+  margin: 0;
+}
+
+.retryBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.saveBtn:disabled,
+.cancelBtn:disabled,
+.acceptBtn:disabled,
+.declineBtn:disabled,
+.avatarEditBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

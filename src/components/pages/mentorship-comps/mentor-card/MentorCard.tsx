@@ -21,11 +21,12 @@ const MentorCard = ({ mentor, alreadyRequested, onRequest }: Props) => {
       <div className={styles.body}>
         <h3 className={styles.name}>{mentor.name}</h3>
         <p className={styles.role}>
-          <Briefcase size={14} /> {mentor.role}, {mentor.company}
+          <Briefcase size={14} />{" "}
+          {[mentor.role, mentor.company].filter(Boolean).join(", ")}
         </p>
         <p className={styles.discipline}>
-          <GraduationCap size={14} /> {mentor.discipline} · Class of{" "}
-          {mentor.graduationYear}
+          <GraduationCap size={14} /> {mentor.discipline}
+          {mentor.graduationYear && <> · Class of {mentor.graduationYear}</>}
         </p>
 
         <p className={styles.bio}>{mentor.bio}</p>

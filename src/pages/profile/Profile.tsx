@@ -4,25 +4,25 @@ import {
   Briefcase,
   Building2,
   Camera,
-  Check,
   LogOut,
   Mail,
   MapPin,
   Pencil,
   Phone,
-  Users,
-  X,
 } from "lucide-react";
 import styles from "./Profile.module.css";
 import { useAuth } from "../../context/auth/useAuth";
-import { DISCIPLINES, GRADUATION_YEARS } from "../../constants/Disciplines";
-import {
-  getRequestsForMentor,
-  getRequestsForUser,
-  updateRequestStatus,
-} from "../../components/pages/mentorship-comps/mentor-list/mentorRequestsStore";
-import { MENTORS } from "../../components/pages/mentorship-comps/mentor-list/mentorsData";
+import type { ProfileFormValues } from "../../context/auth/authContextDef";
+import { DISCIPLINES, DISCIPLINE_GROUPS, GRADUATION_YEARS } from "../../constants/Disciplines";
 import { resizeImageFile } from "../../utils/resizeImage";
+import { toast } from "../../components/toast/toast";
+import type { PublicProfile } from "../../types";
+import DemoMembership from "./DemoMembership";
+import MentorshipRequests from "./MentorshipRequests";
+
+// Limits enforced by PATCH /api/users/me/mentor.
+const MAX_EXPERTISE_TAGS = 10;
+const MAX_EXPERTISE_LENGTH = 60;
 
 const initials = (name: string) =>
   name
@@ -32,42 +32,62 @@ const initials = (name: string) =>
     .map((n) => n[0]?.toUpperCase())
     .join("");
 
+const formFromUser = (user: PublicProfile | null): ProfileFormValues => ({
+  fullName: user?.fullName || "",
+  discipline: user?.discipline || "",
+  graduationYear: user?.graduationYear || "",
+  currentRole: user?.currentRole || "",
+  company: user?.company || "",
+  location: user?.location || "",
+  phone: user?.phone || "",
+  bio: user?.bio || "",
+});
+
 const Profile = () => {
-  const { user, updateProfile, logout } = useAuth();
+  const { user, isDemo, saveProfile, saveAvatar, saveMentorSettings, logout } = useAuth();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [avatarError, setAvatarError] = useState("");
+  const [avatarUploading, setAvatarUploading] = useState(false);
 
-  const [form, setForm] = useState(() => ({
-    fullName: user?.fullName || "",
-    discipline: user?.discipline || DISCIPLINES[0],
-    graduationYear: user?.graduationYear || GRADUATION_YEARS[0],
-    currentRole: user?.currentRole || "",
-    company: user?.company || "",
-    location: user?.location || "",
-    phone: user?.phone || "",
-    bio: user?.bio || "",
-  }));
+  const [form, setForm] = useState(() => formFromUser(user));
 
   const [mentorEditing, setMentorEditing] = useState(false);
+  const [mentorSaving, setMentorSaving] = useState(false);
+  const [mentorError, setMentorError] = useState("");
   const [isMentor, setIsMentor] = useState(user?.isMentor || false);
   const [expertiseInput, setExpertiseInput] = useState(
     user?.mentorExpertise?.join(", ") || ""
   );
-  const [myRequests] = useState(() =>
-    user ? getRequestsForUser(user.id) : []
-  );
-  const [receivedRequests, setReceivedRequests] = useState(() =>
-    user?.isMentor ? getRequestsForMentor(user.id) : []
-  );
 
   if (!user) return null;
 
-  const handleSave = (e: FormEvent) => {
+  // Keep a saved value selectable even if it isn't in the standard lists.
+  const disciplineIsListed = (DISCIPLINES as readonly string[]).includes(form.discipline);
+  const yearIsListed = (GRADUATION_YEARS as readonly string[]).includes(form.graduationYear);
+
+  const startEditing = () => {
+    setForm(formFromUser(user));
+    setSaveError("");
+    setEditing(true);
+  };
+
+  const handleSave = async (e: FormEvent) => {
     e.preventDefault();
-    updateProfile(form);
+    if (saving) return;
+    setSaving(true);
+    setSaveError("");
+    const result = await saveProfile(form);
+    setSaving(false);
+    if (!result.ok) {
+      setSaveError(result.error);
+      return;
+    }
     setEditing(false);
+    toast.success("Profile saved.");
   };
 
   const handleAvatarClick = () => {
@@ -78,6 +98,7 @@ const Profile = () => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e.target.files?.[0];
+    e.target.value = "";
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
@@ -85,40 +106,63 @@ const Profile = () => {
       return;
     }
 
+    let dataUrl: string;
     try {
-      const dataUrl = await resizeImageFile(file);
-      updateProfile({ avatar: dataUrl });
-      setAvatarError("");
+      dataUrl = await resizeImageFile(file);
     } catch {
       setAvatarError("Couldn't load that image. Try another one.");
+      return;
     }
 
-    e.target.value = "";
+    setAvatarUploading(true);
+    setAvatarError("");
+    const result = await saveAvatar(dataUrl);
+    setAvatarUploading(false);
+    if (!result.ok) {
+      setAvatarError(result.error);
+      return;
+    }
+    toast.success("Profile photo updated.");
   };
 
-  const handleSaveMentorSettings = () => {
+  const startMentorEditing = () => {
+    setIsMentor(user.isMentor || false);
+    setExpertiseInput(user.mentorExpertise?.join(", ") || "");
+    setMentorError("");
+    setMentorEditing(true);
+  };
+
+  const handleSaveMentorSettings = async () => {
+    if (mentorSaving) return;
     const mentorExpertise = expertiseInput
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
 
-    updateProfile({ isMentor, mentorExpertise });
-    setMentorEditing(false);
-  };
+    if (mentorExpertise.length > MAX_EXPERTISE_TAGS) {
+      setMentorError(`Add at most ${MAX_EXPERTISE_TAGS} areas of expertise.`);
+      return;
+    }
+    if (mentorExpertise.some((t) => t.length > MAX_EXPERTISE_LENGTH)) {
+      setMentorError(`Each area must be ${MAX_EXPERTISE_LENGTH} characters or fewer.`);
+      return;
+    }
 
-  const handleRequestAction = (
-    requestId: string,
-    status: "Accepted" | "Declined"
-  ) => {
-    updateRequestStatus(requestId, status);
-    setReceivedRequests((prev) =>
-      prev.map((r) => (r.id === requestId ? { ...r, status } : r))
-    );
+    setMentorSaving(true);
+    setMentorError("");
+    const result = await saveMentorSettings({ isMentor, mentorExpertise });
+    setMentorSaving(false);
+    if (!result.ok) {
+      setMentorError(result.error);
+      return;
+    }
+    setMentorEditing(false);
+    toast.success("Mentor settings saved.");
   };
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -135,7 +179,8 @@ const Profile = () => {
               type="button"
               className={styles.avatarEditBtn}
               onClick={handleAvatarClick}
-              aria-label="Change profile picture"
+              disabled={avatarUploading}
+              aria-label={avatarUploading ? "Uploading profile picture" : "Change profile picture"}
             >
               <Camera size={14} />
             </button>
@@ -158,8 +203,11 @@ const Profile = () => {
                 {user.discipline} · Class of {user.graduationYear}
               </span>
             </p>
+            {avatarUploading && (
+              <p className={styles.avatarError} role="status">Uploading photo…</p>
+            )}
             {avatarError && (
-              <p className={styles.avatarError}>{avatarError}</p>
+              <p className={styles.avatarError} role="alert">{avatarError}</p>
             )}
           </div>
           <button
@@ -182,7 +230,7 @@ const Profile = () => {
                 <button
                   type="button"
                   className={styles.editBtn}
-                  onClick={() => setEditing(true)}
+                  onClick={startEditing}
                 >
                   <Pencil size={14} /> Edit
                 </button>
@@ -241,10 +289,16 @@ const Profile = () => {
                         setForm({ ...form, discipline: e.target.value })
                       }
                     >
-                      {DISCIPLINES.map((d) => (
-                        <option key={d} value={d}>
-                          {d}
-                        </option>
+                      <option value="">Select discipline</option>
+                      {form.discipline && !disciplineIsListed && (
+                        <option value={form.discipline}>{form.discipline}</option>
+                      )}
+                      {DISCIPLINE_GROUPS.map((g) => (
+                        <optgroup key={g.faculty} label={g.faculty}>
+                          {g.programmes.map((d) => (
+                            <option key={d} value={d}>{d}</option>
+                          ))}
+                        </optgroup>
                       ))}
                     </select>
                   </div>
@@ -257,6 +311,10 @@ const Profile = () => {
                         setForm({ ...form, graduationYear: e.target.value })
                       }
                     >
+                      <option value="">Select year</option>
+                      {form.graduationYear && !yearIsListed && (
+                        <option value={form.graduationYear}>{form.graduationYear}</option>
+                      )}
                       {GRADUATION_YEARS.map((y) => (
                         <option key={y} value={y}>
                           {y}
@@ -327,16 +385,21 @@ const Profile = () => {
                   />
                 </div>
 
+                {saveError && (
+                  <p className={styles.formError} role="alert">{saveError}</p>
+                )}
+
                 <div className={styles.formActions}>
                   <button
                     type="button"
                     className={styles.cancelBtn}
                     onClick={() => setEditing(false)}
+                    disabled={saving}
                   >
                     Cancel
                   </button>
-                  <button type="submit" className={styles.saveBtn}>
-                    Save Changes
+                  <button type="submit" className={styles.saveBtn} disabled={saving}>
+                    {saving ? "Saving…" : "Save Changes"}
                   </button>
                 </div>
               </form>
@@ -353,7 +416,7 @@ const Profile = () => {
                   <button
                     type="button"
                     className={styles.editBtn}
-                    onClick={() => setMentorEditing(true)}
+                    onClick={startMentorEditing}
                   >
                     <Pencil size={14} /> Edit
                   </button>
@@ -402,11 +465,16 @@ const Profile = () => {
                     </div>
                   )}
 
+                  {mentorError && (
+                    <p className={styles.formError} role="alert">{mentorError}</p>
+                  )}
+
                   <div className={styles.formActions}>
                     <button
                       type="button"
                       className={styles.cancelBtn}
                       onClick={() => setMentorEditing(false)}
+                      disabled={mentorSaving}
                     >
                       Cancel
                     </button>
@@ -414,112 +482,16 @@ const Profile = () => {
                       type="button"
                       className={styles.saveBtn}
                       onClick={handleSaveMentorSettings}
+                      disabled={mentorSaving}
                     >
-                      Save
+                      {mentorSaving ? "Saving…" : "Save"}
                     </button>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Requests received (as a mentor) */}
-            {user.isMentor && (
-              <div className={styles.card}>
-                <h2>Mentorship Requests Received</h2>
-                {receivedRequests.length === 0 ? (
-                  <p className={styles.empty}>No requests yet.</p>
-                ) : (
-                  <ul className={styles.receivedList}>
-                    {receivedRequests.map((r) => (
-                      <li key={r.id}>
-                        <div className={styles.receivedHeader}>
-                          <strong>{r.requesterName}</strong>
-                          <span
-                            className={`${styles.status} ${
-                              styles[r.status.toLowerCase()]
-                            }`}
-                          >
-                            {r.status}
-                          </span>
-                        </div>
-                        <p className={styles.receivedMessage}>{r.message}</p>
-
-                        {r.status === "Pending" ? (
-                          <div className={styles.receivedActions}>
-                            <button
-                              type="button"
-                              className={styles.acceptBtn}
-                              onClick={() =>
-                                handleRequestAction(r.id, "Accepted")
-                              }
-                            >
-                              <Check size={13} /> Accept
-                            </button>
-                            <button
-                              type="button"
-                              className={styles.declineBtn}
-                              onClick={() =>
-                                handleRequestAction(r.id, "Declined")
-                              }
-                            >
-                              <X size={13} /> Decline
-                            </button>
-                          </div>
-                        ) : r.status === "Accepted" ? (
-                          <a
-                            href={`mailto:${r.requesterEmail}`}
-                            className={styles.contactLink}
-                          >
-                            <Mail size={13} /> {r.requesterEmail}
-                          </a>
-                        ) : null}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
-
-            {/* Requests I've sent */}
-            <div className={styles.card}>
-              <h2>My Mentorship Requests</h2>
-              {myRequests.length === 0 ? (
-                <p className={styles.empty}>
-                  You haven't requested a mentor yet.
-                </p>
-              ) : (
-                <ul className={styles.requestList}>
-                  {myRequests.map((r) => {
-                    const mentor = MENTORS.find((m) => m.id === r.mentorId);
-                    return (
-                      <li key={r.id}>
-                        <div className={styles.receivedHeader}>
-                          <strong>{mentor?.name || r.mentorName}</strong>
-                          <span
-                            className={`${styles.status} ${
-                              styles[r.status.toLowerCase()]
-                            }`}
-                          >
-                            {r.status}
-                          </span>
-                        </div>
-                        {r.status === "Accepted" && r.mentorEmail && (
-                          <a
-                            href={`mailto:${r.mentorEmail}`}
-                            className={styles.contactLink}
-                          >
-                            <Mail size={13} /> {r.mentorEmail}
-                          </a>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-              <Link to="/mentorship" className={styles.sidebarLink}>
-                <Users size={15} /> Find a Mentor
-              </Link>
-            </div>
+            <MentorshipRequests userId={user.id} isMentor={!!user.isMentor} isDemo={isDemo} />
 
             <div className={styles.card}>
               <h2>Explore the Network</h2>
@@ -531,6 +503,9 @@ const Profile = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div style={{ marginTop: "2rem" }}>
+          <DemoMembership />
         </div>
       </div>
     </div>

@@ -1,0 +1,29 @@
+.card { background: white; border: 1px solid #dce3e9; border-radius: 12px; padding: 26px; margin-bottom: 24px; }
+.header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.header h2 { font-size: 20px; }
+.demo { background: #fff3d3; color: #715715; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 700; }
+.note, .scenarios p { color: #617183; font-size: 13px; line-height: 1.7; }
+.summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; padding: 24px 0; }
+.summary span, .summary strong { display: block; }
+.summary span { font-size: 12px; color: #617183; margin-bottom: 5px; }
+.summary strong { font-size: 15px; }
+.scenarios { padding: 14px 0; border-block: 1px solid #e5e9ed; margin-bottom: 18px; }
+.scenarios summary { cursor: pointer; font-size: 13px; font-weight: 600; }
+.scenarios label { display: block; font-size: 12px; margin: 14px 0 6px; }
+.scenarios select { width: 100%; max-width: 280px; padding: 9px; border: 1px solid var(--input-border); border-radius: 4px; background: white; color: #0a2540; }
+.scenarios p { margin-top: 10px; }
+.checkbox { display: flex; align-items: center; gap: 9px; font-size: 13px; margin-bottom: 18px; }
+.card button { padding: 11px 16px; border: 1px solid #b9c6d1; border-radius: 6px; background: white; color: #0a2540; font-weight: 600; }
+.card .primary { color: white; background: #0a2540; border-color: #0a2540; }
+.card button:hover { opacity: .85; }
+.card :is(button, select, input, summary):focus-visible { outline: 3px solid #b58a29; outline-offset: 3px; box-shadow: inset 0 0 0 1px var(--primary); }
+.checkout { background: #f5f7fa; border: 1px solid #dce3e9; padding: 18px; border-radius: 8px; }
+.card h3 { font-size: 15px; margin-bottom: 10px; }
+.checkout p { font-size: 13px; margin-bottom: 10px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.message { color: #20634c; font-size: 13px; margin-block: 16px; }
+.history li { padding: 14px 0; border-top: 1px solid #e5e9ed; }
+.history li > div { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.history span, .history p, .history small { color: #617183; font-size: 12px; }
+.history small { display: block; overflow-wrap: anywhere; margin-top: 4px; }
+@media (max-width: 500px) { .card { padding: 18px; } .summary { grid-template-columns: 1fr; gap: 16px; } }

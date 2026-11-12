@@ -91,7 +91,17 @@ export interface SpotlightPerson {
 
 /* ========== Accounts (demo-only, browser-local) ========== */
 
-export type MemberType = "Alumnus" | "Cadet";
+export type MemberType = "Alumnus" | "Cadet" | "Staff";
+
+export type MembershipCategory = "Full" | "Associate" | "Honorary";
+export interface DemoDuesPayment {
+  reference: string;
+  category: MembershipCategory;
+  amount: number;
+  currency: "NGN" | "USD";
+  paidAt: string;
+  validUntil: string;
+}
 
 export interface AuthUser {
   id: string;
@@ -99,6 +109,8 @@ export interface AuthUser {
   email: string;
   passwordHash: string;
   memberType: MemberType;
+  demoMembershipCategory?: MembershipCategory;
+  demoDuesPayments?: DemoDuesPayment[];
   graduationYear: string;
   discipline: string;
   currentRole?: string;
@@ -138,21 +150,6 @@ export interface MentorProfile {
   bio: string;
   email?: string;
   isMember?: boolean;
-}
-
-export type MentorRequestStatus = "Pending" | "Accepted" | "Declined";
-
-export interface MentorRequest {
-  id: string;
-  mentorId: string;
-  mentorName: string;
-  mentorEmail?: string;
-  requesterId: string;
-  requesterName: string;
-  requesterEmail: string;
-  message: string;
-  status: MentorRequestStatus;
-  createdAt: string;
 }
 
 /* ========== Alumni Directory ========== */

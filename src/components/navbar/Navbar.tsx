@@ -39,7 +39,7 @@ export function Navbar() {
   const handleLogout = () => {
     logout();
     setMobileMenuOpen(false);
-    navigate("/");
+    navigate("/login");
   };
 
   return (

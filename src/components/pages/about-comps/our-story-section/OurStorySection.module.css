@@ -1,127 +1,45 @@
-/* components/OurStorySection/OurStorySection.module.css */
+.layout { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 64px; align-items: start; }
 
-.section {
-  width: 100%;
- /* light background like the screenshot */
-  padding: 72px 0;
+.photo { margin: 0; }
+.photo img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 60% center; }
+.photo figcaption { margin-top: 12px; font-size: 12px; color: #6b7a89; }
+
+.timeline { list-style: none; margin: 0; padding: 0; }
+.timeline li {
+  position: relative;
+  display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 24px;
+  padding: 26px 0 26px;
+  border-top: 1px solid rgba(10, 37, 64, 0.14);
 }
-
-.container {
-
-  margin: 0 auto;
+.timeline li:last-child { border-bottom: 1px solid rgba(10, 37, 64, 0.14); }
+.mark {
+  font-family: "Poppins", sans-serif; font-size: 20px; font-weight: 600; letter-spacing: -0.02em;
+  color: var(--primary); line-height: 1.3;
 }
-
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-bottom: 34px;
-}
-
-.kicker {
-  display: inline-block;
-  margin-bottom: 12px;
-  color: #d4a62a;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.title {
-  margin: 0;
-  color: #0a2540;
-  font-size: clamp(2.25rem, 4vw, 3.5rem);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.03em;
-}
-
-.content {
-  width: min(100%, 690px);
-  margin: 0 auto;
-}
-
-.paragraph {
-  margin: 0 0 26px;
-  color: #667085;
-  font-size: 18px;
-  line-height: 1.7;
-  font-weight: 400;
-}
-
-.quoteBox {
-  margin-top: 40px;
-  background: #ffffff;
-  border-left: 4px solid #d4a62a;
-  border-radius: 0 14px 14px 0;
-  padding: 18px 28px;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
-}
+.timeline li:first-child .mark { color: #876a1f; }
+.timeline p { margin: 0; font-size: 16px; line-height: 1.7; color: #4a5b6c; }
+.timeline li:last-child p { color: var(--primary); font-weight: 500; }
 
 .quote {
-  margin: 0;
-  color: #0a2540;
-  font-size: 18px;
-  line-height: 1.65;
-  font-style: italic;
-  font-weight: 600;
+  margin: 80px 0 0; padding: 0 0 0 calc(240px + 40px);
+  position: relative;
+}
+.quote p {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(22px, 2.6vw, 34px);
+  font-weight: 500; line-height: 1.35; letter-spacing: -0.02em;
+  color: var(--primary);
+  max-width: 30ch;
+  padding-left: 28px;
+  border-left: 3px solid var(--accent);
 }
 
-/* Tablet */
-@media (max-width: 900px) {
-  .section {
-    padding: 60px 0 72px;
-  }
-
-  .content {
-    width: min(100%, 720px);
-  }
-
-  .paragraph,
-  .quote {
-    font-size: 17px;
-  }
+@media (max-width: 1000px) {
+  .layout { grid-template-columns: 1fr; gap: 40px; }
+  .photo img { aspect-ratio: 16 / 10; }
+  .quote { padding-left: 0; margin-top: 56px; }
 }
-
-/* Mobile */
-@media (max-width: 640px) {
-  .section {
-    padding: 48px 0 56px;
-  }
-
-  .container {
-    width: min(100%, calc(100% - 24px));
-  }
-
-  .header {
-    margin-bottom: 26px;
-  }
-
-  .title {
-    font-size: 2.1rem;
-  }
-
-  .content {
-    width: 100%;
-  }
-
-  .paragraph {
-    font-size: 16px;
-    line-height: 1.75;
-    margin-bottom: 22px;
-  }
-
-  .quoteBox {
-    margin-top: 28px;
-    padding: 16px 18px;
-    border-radius: 0 12px 12px 0;
-  }
-
-  .quote {
-    font-size: 16px;
-    line-height: 1.7;
-  }
+@media (max-width: 520px) {
+  .timeline li { grid-template-columns: 1fr; gap: 6px; padding: 20px 0; }
+  .quote p { padding-left: 18px; }
 }
