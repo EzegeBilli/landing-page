@@ -2,16 +2,15 @@
   display: flex;
   flex-direction: column;
   background: var(--card);
-  border-radius: 16px;
+  border-radius: 4px;
   overflow: hidden;
-  border: 1px solid var(--muted);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-  transition: 0.3s;
+  border: 1px solid #dce2e7;
+  transition: border-color .2s, box-shadow .2s;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  border-color: var(--accent);
+  box-shadow: 0 12px 28px rgba(10, 37, 64, .06);
 }
 
 .imageLink {
@@ -29,7 +28,7 @@
 }
 
 .card:hover .image {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .badge {
@@ -39,7 +38,7 @@
   background: var(--accent);
   color: var(--primary);
   padding: 6px 14px;
-  border-radius: 30px;
+  border-radius: 2px;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -68,6 +67,8 @@
 }
 
 .title {
+  font-weight: 600;
+  letter-spacing: -.025em;
   font-size: 1.2rem;
   line-height: 1.4;
   margin-bottom: 10px;
@@ -80,7 +81,7 @@
 }
 
 .card:hover .title a {
-  color: var(--teal);
+  color: #876a1f;
 }
 
 .excerpt {

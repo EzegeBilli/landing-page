@@ -1,5 +1,5 @@
 .section {
-  padding: 6rem 0;
+  padding: 3.5rem 0;
   background-color: var(--primary);             /* #0A2540 */
   position: relative;
   overflow: hidden;
@@ -29,20 +29,15 @@
   font-weight: 700;
   color: var(--primary-foreground);             /* #ffffff */
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.75rem;
 }
 
 /* ---------- grid ---------- */
 .grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 2rem;
-}
-
-@media (min-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 /* ---------- card ---------- */
@@ -54,17 +49,21 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: min(100%, 390px);
 }
 
 .imgWrap {
   position: relative;
-  height: 12rem;
+  height: 13rem;
+  padding: 2.25rem .75rem .75rem;
+  background: #f3f4f1;
 }
 
 .img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  display: block;
 }
 
 .dateBadge {
@@ -81,7 +80,7 @@
 }
 
 .body {
-  padding: 1.5rem;
+  padding: 1.125rem;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -118,15 +117,39 @@
   color: var(--muted-foreground);               /* #64748B */
   font-size: 0.875rem;
   margin-top: auto;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .registerBtn {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: .65rem 1rem;
+  border: 1px solid var(--teal);
+  border-radius: 4px;
+  color: var(--teal);
+  font-size: .875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.registerBtn:hover { background: color-mix(in srgb, var(--teal) 8%, white); }
+
+@media (min-width: 768px) {
+  .card { width: calc((100% - 2rem) / 2); }
+}
+
+@media (min-width: 1024px) {
+  .card { width: calc((100% - 4rem) / 3); }
 }
 
 /* ---------- footer ---------- */
 .footer {
-  margin-top: 3rem;
+  margin-top: 1.5rem;
   text-align: center;
+}
+
+@media (max-width: 767px) {
+  .section { padding: 2.5rem 0; }
+  .heading { font-size: 1.6rem; margin-bottom: 1.5rem; }
 }

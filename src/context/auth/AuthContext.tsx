@@ -83,6 +83,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     backendUserRef.current = null;
     setBackendUser(null);
     queryClient.removeQueries({ queryKey: ["mentorship"] });
+    void queryClient.cancelQueries({ queryKey: ["event-member"] });
+    queryClient.removeQueries({ queryKey: ["event-member"] });
   }, [queryClient]);
 
   // Any API call that still gets 401 after a token refresh lands here.
@@ -101,6 +103,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const found = users.find((u) => u.id === sessionUserId);
     return backendUser || (found ? toPublicProfile(found) : null);
   }, [users, sessionUserId, backendUser]);
+
+  useEffect(() => {
+    // Remove the previous account's event data and stop its in-flight queries.
+    const account = user?.id ?? "anonymous";
+    const filters = { predicate: (query: { queryKey: readonly unknown[] }) =>
+      query.queryKey[0] === "event-member" && query.queryKey[1] !== account };
+    void queryClient.cancelQueries(filters);
+    queryClient.removeQueries(filters);
+  }, [user?.id, queryClient]);
 
   const register: AuthContextValue["register"] = ({
     fullName,

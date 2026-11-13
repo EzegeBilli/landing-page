@@ -1,0 +1,32 @@
+﻿.page { min-height:100vh; background:#fff; color:var(--primary); }
+.page a:focus-visible,.page button:focus-visible,.page input:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+.hero { background:var(--primary); color:white; padding:128px 40px 0; }
+.heroGrid { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,440px); gap:64px; align-items:start; }
+.heroInner { padding:32px 0 64px; }
+.eyebrow { display:inline-flex; align-items:center; gap:12px; font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#876a1f; margin-bottom:24px; }
+.eyebrow::before { content:""; width:32px; height:1px; flex-shrink:0; background:var(--accent); }
+.hero .eyebrow { color:#e6cf8f; }
+.hero h1 { font-family:"Poppins",sans-serif; font-size:clamp(38px,5.6vw,76px); font-weight:600; line-height:1.06; letter-spacing:-.045em; overflow-wrap:break-word; }
+.hero h1 em { font-style:normal; color:#e6cf8f; }
+.heroInner > p { margin-top:28px; max-width:48ch; font-size:18px; line-height:1.7; color:rgba(255,255,255,.8); }
+.heroActions { display:flex; flex-wrap:wrap; gap:12px; margin-top:32px; }
+.heroActions a { display:inline-flex; align-items:center; gap:12px; padding:14px 22px; border:1px solid rgba(255,255,255,.4); border-radius:4px; color:white; font-size:14px; font-weight:600; text-decoration:none; }
+.heroActions a:first-child { background:var(--accent); border-color:var(--accent); color:var(--primary); }
+.heroActions a:hover { border-color:#e6cf8f; }
+.heroPhoto { position:relative; margin:0; border-left:1px solid rgba(230,207,143,.5); padding-left:16px; }
+.heroPhoto img { display:block; width:100%; aspect-ratio:4/5; object-fit:cover; }
+.heroPhoto figcaption { position:absolute; bottom:0; left:16px; right:0; padding:48px 20px 20px; color:rgba(255,255,255,.9); font-size:12px; line-height:1.6; background:linear-gradient(transparent,rgba(10,37,64,.9)); }
+.sectionIntro { max-width:1280px; margin:0 auto; padding:56px 40px 32px; scroll-margin-top:96px; }
+.sectionIntro h2 { font-family:"Poppins",sans-serif; font-size:clamp(28px,3.5vw,42px); font-weight:600; line-height:1.2; letter-spacing:-.035em; }
+.sectionIntro p { margin-top:16px; color:#4a5b6c; font-size:16px; line-height:1.7; max-width:65ch; }
+@media(max-width:860px) {
+  .hero { padding:104px 20px 0; }
+  .heroGrid { grid-template-columns:1fr; gap:32px; }
+  .heroInner { padding:0; }
+  .heroInner > p { font-size:16px; }
+  .heroActions { margin-top:28px; }
+  .heroPhoto { border:0; padding:0; }
+  .heroPhoto img { aspect-ratio:3/2; }
+  .heroPhoto figcaption { left:0; }
+  .sectionIntro { padding:40px 20px 24px; }
+}

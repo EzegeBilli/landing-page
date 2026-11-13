@@ -9,7 +9,7 @@
   padding: 0;
   border: none;
   cursor: pointer;
-  border-radius: 14px;
+  border-radius: 4px;
   overflow: hidden;
   aspect-ratio: 4 / 3;
   background: var(--muted);

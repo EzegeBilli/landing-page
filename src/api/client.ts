@@ -37,6 +37,7 @@ interface Envelope<T> {
   message?: string;
   data?: T;
   details?: unknown;
+  pagination?: { total: number; page: number; limit: number; pages: number };
 }
 
 // ---------------------------------------------------------------------------
@@ -160,7 +161,7 @@ function expireSession(): never {
 }
 
 /** Sends a request and returns the `{ message, data }` of the backend's success envelope. */
-export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<{ message: string; data: T }> {
+export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<{ message: string; data: T; pagination?: Envelope<T>["pagination"] }> {
   const auth = options.auth ?? true;
   const tokenUsed = accessToken;
   let response = await send(path, options);
@@ -185,5 +186,5 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     const detail = describeDetails(result?.details);
     throw new ApiError(detail ? `${message}: ${detail}` : message, response.status, result?.details);
   }
-  return { message: result.message ?? "", data: result.data as T };
+  return { message: result.message ?? "", data: result.data as T, ...(result.pagination ? { pagination: result.pagination } : {}) };
 }

@@ -1,62 +1,66 @@
-.events {
-  width: 100%;
-  min-height: 100vh;
-  background: #f8fafc;
-  padding: 120px 20px;
+﻿.events { width:100%; min-height:80vh; padding:0 0 96px; background:#fff; color:var(--primary); }
+.container { max-width:1280px; padding:0 40px; margin:0 auto; }
+.events a:focus-visible, .events button:focus-visible, .events input:focus-visible, .events select:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+.hero { background:var(--primary); color:#fff; padding:128px 0 76px; }
+.eyebrow { display:inline-flex; align-items:center; gap:12px; font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#876a1f; margin-bottom:22px; }
+.eyebrow::before { content:""; width:32px; height:1px; background:var(--accent); flex-shrink:0; }
+.hero .eyebrow, .detailHero .eyebrow { color:#e6cf8f; }
+.hero h1 { font-family:"Poppins",sans-serif; font-size:clamp(40px,6vw,80px); font-weight:600; line-height:1.08; letter-spacing:-.045em; }
+.hero h1 em { font-style:normal; color:#e6cf8f; }
+.hero p { margin-top:26px; max-width:55ch; font-size:18px; line-height:1.7; color:rgba(255,255,255,.8); }
+.heroActions { display:flex; flex-wrap:wrap; gap:12px; margin-top:32px; }
+.heroActions a, .detailJump { display:inline-flex; align-items:center; gap:16px; padding:14px 22px; border:1px solid rgba(255,255,255,.4); border-radius:4px; font-size:14px; font-weight:600; text-decoration:none; color:#fff; }
+.heroActions a:first-child { background:var(--accent); color:var(--primary); border-color:var(--accent); }
+.sectionHeading { padding:64px 0 30px; }
+.sectionHeading h2, .eventOverview h2 { font-family:"Poppins",sans-serif; font-size:clamp(28px,3.5vw,42px); letter-spacing:-.035em; font-weight:600; line-height:1.2; }
+.sectionHeading p { margin-top:16px; color:#4a5b6c; line-height:1.7; }
+.header { padding-top:96px; margin-bottom:40px; }
+.header h1 { font-size:clamp(34px,5vw,56px); letter-spacing:-.04em; margin-bottom:18px; }
+.header p { color:#4a5b6c; font-size:18px; line-height:1.7; margin-bottom:20px; }
+.controls { display:flex; flex-wrap:wrap; align-items:center; gap:20px; padding:24px 0; margin:0 0 32px; border-top:1px solid #dce2e7; border-bottom:1px solid #dce2e7; }
+.controls label { display:flex; flex:1; min-width:160px; flex-direction:column; gap:10px; font-size:13px; font-weight:600; }
+.controls label:first-child { flex:2; }
+.controls input, .controls select, .events button { padding:13px 16px; border:1px solid #cbd5e1; border-radius:4px; background:#fff; color:var(--primary); font:inherit; }
+.controls input,.controls select { width:100%; min-width:0; font-size:14px; font-weight:400; }
+.events button { cursor:pointer; font-size:14px; font-weight:600; }
+.events button:hover:not(:disabled) { border-color:#876a1f; background:#fbf8ef; }
+.events button:disabled { cursor:default; opacity:.55; }
+.events > .container > .controls:first-child { padding-top:100px; border-top:0; }
+.detail { margin:0 0 28px; overflow-wrap:anywhere; }
+.registration { padding:28px 0; border-bottom:1px solid #dce2e7; }
+.registration h2 { font-size:24px; font-weight:600; letter-spacing:-.025em; }
+.registration p { margin:16px 0; color:#4a5b6c; line-height:1.6; }
+.detailHero { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:48px; align-items:center; background:var(--primary); color:white; padding:48px; }
+.detailIntro h1 { font-family:"Poppins",sans-serif; font-size:clamp(30px,4vw,52px); font-weight:600; line-height:1.15; letter-spacing:-.04em; }
+.detailIntro p { color:rgba(255,255,255,.8); line-height:1.8; margin:24px 0; text-transform:capitalize; }
+.detailJump { border-color:var(--accent); color:#e6cf8f; }
+.noCover { grid-template-columns:1fr; }
+.coverFrame { margin:0; padding:12px; background:rgba(255,255,255,.06); border:1px solid rgba(230,207,143,.25); }
+.cover { display:block; width:100%; height:auto; max-height:600px; object-fit:contain; }
+.detailBody { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:64px; padding:64px 0; border-bottom:1px solid #dce2e7; scroll-margin-top:100px; }
+.description { white-space:pre-wrap; line-height:1.9; margin:24px 0; color:#4a5b6c; }
+.eventInformation { background:#f7f8f6; padding:32px; border-top:3px solid var(--accent); }
+.facts { display:grid; grid-template-columns:minmax(80px,110px) minmax(0,1fr); gap:18px 16px; color:#4a5b6c; font-size:14px; line-height:1.6; }
+.facts dt { font-weight:600; color:var(--primary); }
+.facts dd { margin:0; }
+.actions { margin-top:28px; border-top:1px solid #dce2e7; padding-top:24px; }
+.actions p { margin:12px 0; line-height:1.6; font-size:14px; }
+.actions > button { width:100%; background:var(--primary); border-color:var(--primary); color:white; padding:16px; }
+.actions > button:hover:not(:disabled) { background:#163e60; color:white; }
+#event-calendar { scroll-margin-top:80px; }
+@media(max-width:860px) {
+  .container { padding:0 20px; }
+  .hero { padding:104px 0 56px; }
+  .hero p { font-size:16px; }
+  .detailHero { grid-template-columns:1fr; gap:32px; padding:28px; }
+  .detailBody { grid-template-columns:1fr; gap:32px; padding:40px 0; }
+  .cover { max-height:560px; }
+  .sectionHeading { padding-top:40px; }
 }
-
-.container {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-.header {
-  margin-bottom: 60px;
-}
-
-.header h1 {
-  margin-bottom: 18px;
-  font-size: 56px;
-  font-weight: 700;
-  color: #082c5b;
-  line-height: 1.2;
-}
-
-.header p {
-  max-width: 720px;
-  font-size: 20px;
-  line-height: 1.7;
-  color: #66758d;
-}
-
-/* Tablet */
-
-@media (max-width: 768px) {
-  .events {
-    padding: 90px 20px;
-  }
-
-  .header {
-    margin-bottom: 40px;
-  }
-
-  .header h1 {
-    font-size: 42px;
-  }
-
-  .header p {
-    font-size: 18px;
-  }
-}
-
-/* Mobile */
-
-@media (max-width: 480px) {
-  .header h1 {
-    font-size: 34px;
-  }
-
-  .header p {
-    font-size: 16px;
-  }
+@media(max-width:480px) {
+  .controls label { flex-basis:100%; }
+  .detailHero { padding:24px 18px; }
+  .eventInformation { padding:24px 18px; }
+  .facts { grid-template-columns:1fr; gap:6px; }
+  .facts dd { margin-bottom:12px; }
 }

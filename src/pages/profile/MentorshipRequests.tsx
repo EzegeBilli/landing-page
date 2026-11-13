@@ -1,3 +1,4 @@
+import Loader from "../../components/ui/loader/Loader";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Check, Mail, Users, X } from "lucide-react";
@@ -79,7 +80,7 @@ export default function MentorshipRequests({ userId, isMentor, isDemo }: Props) 
       {showReceived && (
         <div className={styles.card}>
           <h2>Mentorship Requests Received</h2>
-          {received.isPending && <p className={styles.empty} role="status">Loading requests…</p>}
+          {received.isPending && <Loader label="Loading requests…" />}
           {received.isError && <LoadError error={received.error} onRetry={() => void received.refetch()} />}
           {received.isSuccess && (received.data.length === 0 ? (
             <p className={styles.empty}>No requests yet.</p>
@@ -104,7 +105,7 @@ export default function MentorshipRequests({ userId, isMentor, isDemo }: Props) 
                           disabled={respond.isPending}
                           onClick={() => handleRespond(r.id, "accepted")}
                         >
-                          <Check size={13} /> {busyId === r.id ? "Saving…" : "Accept"}
+                          <Check size={13} /> {busyId === r.id ? <Loader inline label="Saving…" /> : "Accept"}
                         </button>
                         <button
                           type="button"
@@ -136,7 +137,7 @@ export default function MentorshipRequests({ userId, isMentor, isDemo }: Props) 
           </p>
         ) : (
           <>
-            {sent.isPending && <p className={styles.empty} role="status">Loading requests…</p>}
+            {sent.isPending && <Loader label="Loading requests…" />}
             {sent.isError && <LoadError error={sent.error} onRetry={() => void sent.refetch()} />}
             {sent.isSuccess && (sent.data.length === 0 ? (
               <p className={styles.empty}>You haven't requested a mentor yet.</p>

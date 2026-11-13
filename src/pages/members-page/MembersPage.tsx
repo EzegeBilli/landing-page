@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
+import layout from "../../styles/CommunityPages.module.css";
 import { Link } from "react-router-dom";
 import styles from "./MembersPage.module.css";
 import type { MemberProfile } from "../../types";
@@ -76,67 +77,37 @@ const MembersPage = () => {
     [],
   );
 
-  /* ---- sliding tab indicator ---- */
-  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [indicator, setIndicator] = useState({ left: 0, width: 0 });
-
-  useEffect(() => {
-    const el = tabRefs.current[category];
-    if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
-  }, [category]);
-
-  useEffect(() => {
-    const onResize = () => {
-      const el = tabRefs.current[category];
-      if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [category]);
-
-  /* ---- scroll-reveal for the grid ---- */
-  const gridRef = useRef<HTMLDivElement>(null);
-  const [gridVisible, setGridVisible] = useState(false);
-
-  useEffect(() => {
-    const node = gridRef.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setGridVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.05 },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  // remount key so entrance animation replays whenever the visible set changes
-  const gridKey = `${category}-${sortBy}-${search}`;
 
   return (
-    <div className={styles.page}>
-      {/* Hero */}
-      <section className={styles.hero}>
-        <div className={styles.blob1} aria-hidden="true" />
-        <div className={styles.blob2} aria-hidden="true" />
-        <div className={styles.heroInner}>
-          <span className={styles.badge}>2026 – 2028 Term</span>
-          <h1>Our Leadership & Members</h1>
-          <p>
-            Meet the elected officers, directors and members of the Nigeria
-            Maritime University Alumni Association.
-          </p>
+    <div className={layout.page}>
+      <section className={layout.hero} aria-labelledby="leadership-title">
+        <div className={layout.heroGrid}>
+          <div className={layout.heroInner}>
+            <span className={layout.eyebrow}>Alumni leadership</span>
+            <h1 id="leadership-title">United in service.<br /><em>Leading together.</em></h1>
+            <p>Meet the elected officers, directors and members guiding the Nigeria Maritime University Alumni Association.</p>
+            <div className={layout.heroActions}>
+              <a href="#executive-leadership">Meet our leaders <span aria-hidden="true">&darr;</span></a>
+              <a href="#leadership-directory">Explore the directory</a>
+            </div>
+          </div>
+          {spotlight[0] && <figure className={styles.heroPortrait}>
+            <img src={spotlight[0].image} alt={spotlight[0].name} fetchPriority="high" />
+            <figcaption><span>{spotlight[0].title} / {spotlight[0].tenure}</span><Link to={`/leadership/${spotlight[0].id}`}>{spotlight[0].name} <span aria-hidden="true">&rarr;</span></Link></figcaption>
+          </figure>}
         </div>
       </section>
 
+      <div className={styles.factsWrap}><dl className={styles.facts}>
+        <div><dt>{counts.all}</dt><dd>Leaders &amp; members</dd></div>
+        <div><dt>{counts.executive}</dt><dd>Executive Council members</dd></div>
+        <div><dt>{counts.directors}</dt><dd>Directors serving our network</dd></div>
+      </dl></div>
+
       {/* Leadership Spotlight */}
-      <section className={styles.spotlightSection}>
+      <section className={styles.spotlightSection} id="executive-leadership" aria-labelledby="executive-title">
         <div className={styles.container}>
-          <h2 className={styles.spotlightHeading}>Executive Leadership</h2>
+          <div className={styles.sectionHeading}><span className={layout.eyebrow}>01 / At the helm</span><h2 id="executive-title">Executive leadership</h2><p>Meet the officers leading our association and serving our alumni community.</p></div>
           <div className={styles.spotlightGrid}>
             {spotlight.map((m, i) => (
               <Link
@@ -161,6 +132,11 @@ const MembersPage = () => {
         </div>
       </section>
 
+      <div className={layout.sectionIntro} id="leadership-directory">
+        <span className={layout.eyebrow}>02 / The people behind our progress</span>
+        <h2>Our leadership &amp; members</h2>
+        <p>Find a familiar face, discover a role, and learn more about the people serving our network.</p>
+      </div>
       {/* Controls */}
       <div className={styles.controls}>
         <div className={styles.controlsInner}>
@@ -197,24 +173,12 @@ const MembersPage = () => {
             )}
           </div>
 
-          <div className={styles.tabs} role="tablist">
-            <span
-              className={styles.tabIndicator}
-              style={{
-                transform: `translateX(${indicator.left}px)`,
-                width: indicator.width,
-              }}
-              aria-hidden="true"
-            />
+          <div className={styles.tabs} role="group" aria-label="Filter members by category">
             {(Object.keys(CATEGORY_LABELS) as CategoryFilter[]).map((key) => (
               <button
                 key={key}
-                ref={(el) => {
-                  tabRefs.current[key] = el;
-                }}
                 type="button"
-                role="tab"
-                aria-selected={category === key}
+                aria-pressed={category === key}
                 className={`${styles.tab} ${
                   category === key ? styles.tabActive : ""
                 }`}
@@ -244,7 +208,7 @@ const MembersPage = () => {
 
       {/* Results meta */}
       <div className={styles.meta}>
-        <p>
+        <p role="status" aria-live="polite">
           Showing <strong>{filtered.length}</strong> of {allMembers.length}{" "}
           members
           {search && (
@@ -257,7 +221,7 @@ const MembersPage = () => {
       </div>
 
       {/* Grid */}
-      <section className={styles.section} ref={gridRef}>
+      <section className={styles.section}>
         <div className={styles.container}>
           {filtered.length === 0 ? (
             <div className={styles.empty}>
@@ -273,12 +237,7 @@ const MembersPage = () => {
               </button>
             </div>
           ) : (
-            <div
-              key={gridKey}
-              className={`${styles.grid} ${
-                gridVisible ? styles.gridVisible : ""
-              }`}
-            >
+            <div className={styles.grid}>
               {filtered.map((member, i) => (
                 <MemberCard key={member.id} member={member} index={i} />
               ))}

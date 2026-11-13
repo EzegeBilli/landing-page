@@ -4,7 +4,7 @@
 /* ---------- Hero: navy split with portrait campus photograph ---------- */
 .hero { background: var(--primary); color: #fff; padding: 128px 40px 0; overflow: hidden; }
 .heroGrid { max-width: 1200px; margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 72px; align-items: end; }
-.heroInner { padding-bottom: 80px; }
+.heroInner { align-self: start; padding: 32px 0 80px; }
 .eyebrow {
   display: inline-flex; align-items: center; gap: 12px;
   font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #e6cf8f;
@@ -67,7 +67,7 @@
 @media (max-width: 860px) {
   .hero { padding: 104px 20px 0; }
   .heroGrid { grid-template-columns: 1fr; gap: 40px; }
-  .heroInner { padding-bottom: 0; }
+  .heroInner { padding: 0; }
   .hero p { font-size: 16px; }
   .heroPhoto::before { display: none; }
   .heroPhoto img { aspect-ratio: 4 / 5; }

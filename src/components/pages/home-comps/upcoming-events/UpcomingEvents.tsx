@@ -1,96 +1,34 @@
+import Loader from "../../../ui/loader/Loader";
 import { Link } from "react-router";
 import { Anchor, MapPin } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { eventDate, eventKeys, eventTypes, listEvents, safeEventUrl } from "../../../../api/events";
+import { retryUnlessClientError } from "../../../../api/mentorship";
 import styles from "./UpcomingEvents.module.css";
 import { Button } from "../../../ui/button/Button";
-
-interface Event {
-  title: string;
-  date: string;
-  loc: string;
-  tags: string[];
-  img: string;
-}
-
-const EVENTS: Event[] = [
-  {
-    title: "NMU Alumni Annual Reunion 2025",
-    date: "Oct 15, 2025",
-    loc: "Eko Hotels, Lagos",
-    tags: ["Networking", "Gala"],
-    img: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    title: "Maritime Career Fair",
-    date: "Nov 02, 2025",
-    loc: "Virtual",
-    tags: ["Career", "Industry"],
-    img: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    title: "Delta Waterways Forum",
-    date: "Dec 10, 2025",
-    loc: "Warri, Delta State",
-    tags: ["Seminar", "Policy"],
-    img: "https://images.unsplash.com/photo-1663103746090-2e4274c6c7ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaGlwcGluZyUyMGNvbnRhaW5lciUyMHBvcnR8ZW58MXx8fHwxNzc2MTAyNjA5fDA&ixlib=rb-4.1.0&q=80&w=1080",
-  },
-];
-
+const filters = { when: "upcoming", page: 1, limit: 3 } as const;
 export default function UpcomingEvents() {
-  return (
-    <section className={styles.section}>
-      {/* decorative anchor motif */}
-      <div className={styles.motif} aria-hidden="true">
-        <Anchor size={400} />
-      </div>
-
-      <div className={styles.container}>
-        <h2 className={styles.heading}>
-          Reunions, Seminars &amp; Maritime Summits
-        </h2>
-
-        <div className={styles.grid}>
-          {EVENTS.map((event) => (
-            <div key={event.title} className={styles.card}>
-              {/* Image */}
-              <div className={styles.imgWrap}>
-                <img
-                  src={event.img}
-                  alt={event.title}
-                  className={styles.img}
-                />
-                <div className={styles.dateBadge}>{event.date}</div>
-              </div>
-
-              {/* Body */}
-              <div className={styles.body}>
-                <div className={styles.tags}>
-                  {event.tags.map((tag) => (
-                    <span key={tag} className={styles.tag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <h3 className={styles.title}>{event.title}</h3>
-                <div className={styles.location}>
-                  <MapPin size={16} />
-                  {event.loc}
-                </div>
-                <Button variant="outlineTeal" className={styles.registerBtn}>
-                  Register Now
-                </Button>
-              </div>
-            </div>
-          ))}
+  const query = useQuery({ queryKey: eventKeys.list(filters), queryFn: () => listEvents(filters), retry: (count, error: Error) => retryUnlessClientError(count, error) });
+  return <section className={styles.section}>
+    <div className={styles.motif} aria-hidden="true"><Anchor size={400} /></div>
+    <div className={styles.container}>
+      <h2 className={styles.heading}>Reunions, Seminars &amp; Maritime Summits</h2>
+      {query.isPending && <Loader label="Loading upcoming events..." />}
+      {query.isError && <p role="alert">{query.error.message} <button onClick={() => void query.refetch()}>Try again</button></p>}
+      {query.isSuccess && !query.data.events.length && <p>No upcoming events at the moment.</p>}
+      <div className={styles.grid}>{query.data?.events.map(event => <div key={event._id} className={styles.card}>
+        <div className={styles.imgWrap}>
+          {safeEventUrl(event.coverImageUrl) && <img src={safeEventUrl(event.coverImageUrl)} alt={event.title} className={styles.img} loading="lazy" />}
+          <div className={styles.dateBadge}>{eventDate(event.startDate)}</div>
         </div>
-
-        <div className={styles.footer}>
-          <Link to="/events">
-            <Button variant="ghost" size="lg">
-              View All Events
-            </Button>
-          </Link>
+        <div className={styles.body}>
+          <div className={styles.tags}><span className={styles.tag}>{eventTypes[event.type] ?? "Event"}</span><span className={styles.tag}>{event.format}</span></div>
+          <h3 className={styles.title}>{event.title}</h3>
+          <div className={styles.location}><MapPin size={16} />{event.venue || (event.format === "virtual" ? "Online" : "Venue to be confirmed")}</div>
+          <Link to={`/events/${event._id}`} className={styles.registerBtn}>View Details &amp; Register</Link>
         </div>
-      </div>
-    </section>
-  );
+      </div>)}</div>
+      <div className={styles.footer}><Link to="/events"><Button variant="ghost" size="lg">View All Events</Button></Link></div>
+    </div>
+  </section>;
 }

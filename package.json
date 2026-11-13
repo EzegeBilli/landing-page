@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "test": "node scripts/test-auth-api.mjs && node scripts/test-profile-mentorship-api.mjs",
+    "test": "node scripts/test-auth-api.mjs && node scripts/test-profile-mentorship-api.mjs && node scripts/test-events-api.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

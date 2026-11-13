@@ -1,3 +1,4 @@
+import Loader from "../../components/ui/loader/Loader";
 import { useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock, LogIn, Mail } from "lucide-react";
@@ -97,7 +98,7 @@ const Login = () => {
 
 
             <button type="submit" className={styles.submitBtn} disabled={loginMutation.isPending}>
-              <LogIn size={19} strokeWidth={2.25} aria-hidden="true" /> {loginMutation.isPending ? "Logging in…" : "Log In"}
+              <LogIn size={19} strokeWidth={2.25} aria-hidden="true" /> {loginMutation.isPending ? <Loader inline label="Logging in…" /> : "Log In"}
             </button>
           </form>
           <p className={styles.footerText}><Link to="/verify-email" className={styles.link}>Still need to verify your email?</Link></p>

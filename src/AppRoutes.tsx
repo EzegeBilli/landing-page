@@ -4,6 +4,8 @@ import Home from "./pages/home/Home";
 import Layout from "./components/layout/Layout";
 import About from "./pages/about/About";
 import Events from "./pages/events/Events";
+import EventDetail from "./pages/events/EventDetail";
+import MyEvents from "./pages/events/MyEvents";
 // import Leadership from "./pages/leadership/Leadership";
 import PendingApproval from "./pages/pending-approval/PendingApproval";
 import NotFound from "./pages/not-found/NotFound";
@@ -37,6 +39,8 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/events/my-events" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
+        <Route path="/events/:id" element={<EventDetail />} />
         {/* <Route path="/leadership" element={<Leadership />} /> */}
         <Route path="/leadership" element={<MembersPage />} />
 

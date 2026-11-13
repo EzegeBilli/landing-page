@@ -1,3 +1,4 @@
+import layout from "../../styles/CommunityPages.module.css";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
@@ -22,12 +23,10 @@ const News = () => {
   const [category, setCategory] = useState<CategoryFilter>("all");
 
   const featured = NEWS.find((a) => a.featured);
-  const showFeatured = !search && category === "all" ? featured : undefined;
+
 
   const filtered = useMemo(() => {
-    let list = showFeatured
-      ? NEWS.filter((a) => a.id !== showFeatured.id)
-      : NEWS;
+    let list = NEWS;
 
     if (category !== "all") {
       list = list.filter((a) => a.category === category);
@@ -44,51 +43,35 @@ const News = () => {
     }
 
     return list;
-  }, [search, category, showFeatured]);
+  }, [search, category]);
 
   return (
-    <div className={styles.page}>
-      <section className={styles.hero}>
-        <div className={styles.heroInner}>
-          <h1>News &amp; Blog</h1>
-          <p>
-            Stories, updates, and career milestones from the Nigeria Maritime
-            University Alumni Network.
-          </p>
+    <div className={layout.page}>
+      <section className={layout.hero} aria-labelledby="news-title">
+        <div className={layout.heroGrid}>
+          <div className={layout.heroInner}>
+            <span className={layout.eyebrow}>News &amp; Blog</span>
+            <h1 id="news-title">Our community.<br /><em>Our stories.</em></h1>
+            <p>Stories, updates and career milestones from the Nigeria Maritime University Alumni Network.</p>
+            <div className={layout.heroActions}><a href="#news-stories">Explore stories <span aria-hidden="true">&darr;</span></a><Link to="/gallery">View our gallery</Link></div>
+          </div>
+          {featured && <article className={styles.heroFeature}>
+            <Link to={`/news/${featured.id}`} className={styles.featureImageLink} tabIndex={-1} aria-hidden="true"><img src={featured.image} alt="" fetchPriority="high" /></Link>
+            <div className={styles.featuredContent}>
+              <span className={styles.featuredBadge}>In focus / {featured.category}</span>
+              <h2><Link to={`/news/${featured.id}`}>{featured.title}</Link></h2>
+              <p>{featured.excerpt}</p>
+              <div className={styles.featuredMeta}><span>{featured.author}</span><span>{featured.date}</span><span>{featured.readTime}</span></div>
+            </div>
+          </article>}
         </div>
       </section>
 
-      {showFeatured && (
-        <section className={styles.featuredSection}>
-          <div className={styles.featuredCard}>
-            <img
-              src={showFeatured.image}
-              alt={showFeatured.title}
-              className={styles.featuredImg}
-            />
-            <div className={styles.featuredContent}>
-              <span className={styles.featuredBadge}>
-                Featured · {showFeatured.category}
-              </span>
-              <h2>{showFeatured.title}</h2>
-              <p>{showFeatured.excerpt}</p>
-              <div className={styles.featuredMeta}>
-                <span>{showFeatured.author}</span>
-                <span>·</span>
-                <span>{showFeatured.date}</span>
-                <span>·</span>
-                <span>{showFeatured.readTime}</span>
-              </div>
-              <Link
-                to={`/news/${showFeatured.id}`}
-                className={styles.featuredLink}
-              >
-                Read Full Story →
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
+      <div className={layout.sectionIntro} id="news-stories">
+        <span className={layout.eyebrow}>01 / From the network</span>
+        <h2>Stories worth sharing</h2>
+        <p>Discover the latest news, alumni achievements and perspectives from our community.</p>
+      </div>
 
       <div className={styles.controls}>
         <div className={styles.controlsInner}>
@@ -104,13 +87,12 @@ const News = () => {
             />
           </div>
 
-          <div className={styles.tabs} role="tablist">
+          <div className={styles.tabs} role="group" aria-label="Filter articles by category">
             {CATEGORIES.map((key) => (
               <button
                 key={key}
                 type="button"
-                role="tab"
-                aria-selected={category === key}
+                aria-pressed={category === key}
                 className={`${styles.tab} ${
                   category === key ? styles.tabActive : ""
                 }`}

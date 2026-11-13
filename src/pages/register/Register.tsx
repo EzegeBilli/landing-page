@@ -1,3 +1,4 @@
+import Loader from "../../components/ui/loader/Loader";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -169,11 +170,11 @@ const Register = ({ verificationEmail = "" }: { verificationEmail?: string }) =>
                 </div>
                 <div className={styles.field}>
                   <button type="button" className={styles.resendBtn} onClick={handleResendOtp} disabled={resend.isPending || verification.isPending || resendSeconds > 0}>
-                    {resend.isPending ? "Sending…" : resendSeconds > 0 ? `Resend OTP in ${resendSeconds}s` : "Resend OTP"}
+                    {resend.isPending ? <Loader inline label="Sending…" /> : resendSeconds > 0 ? `Resend OTP in ${resendSeconds}s` : "Resend OTP"}
                   </button>
                   {resendMessage && <p className={styles.resendFeedback}>Use the latest code. It replaces the previous code and expires after 15 minutes.</p>}
                 </div>
-                <button type="submit" className={styles.nextBtn} disabled={verification.isPending || resend.isPending}>{verification.isPending ? "Verifying…" : "Verify email"}</button>
+                <button type="submit" className={styles.nextBtn} disabled={verification.isPending || resend.isPending}>{verification.isPending ? <Loader inline label="Verifying…" /> : "Verify email"}</button>
               </form>
             </>}
           </> : <>
@@ -375,7 +376,7 @@ const Register = ({ verificationEmail = "" }: { verificationEmail?: string }) =>
                   onClick={handleCreateAccount}
                   disabled={registration.isPending}
                 >
-                  <UserPlus size={18} strokeWidth={2.25} aria-hidden="true" /> {registration.isPending ? "Creating account…" : "Create Account"}
+                  <UserPlus size={18} strokeWidth={2.25} aria-hidden="true" /> {registration.isPending ? <Loader inline label="Creating account…" /> : "Create Account"}
                 </button>
               )}
             </div>

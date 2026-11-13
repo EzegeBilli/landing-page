@@ -1,3 +1,4 @@
+import Loader from "../../components/ui/loader/Loader";
 import { useRef, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -204,7 +205,7 @@ const Profile = () => {
               </span>
             </p>
             {avatarUploading && (
-              <p className={styles.avatarError} role="status">Uploading photo…</p>
+              <Loader inline label="Uploading photo..." />
             )}
             {avatarError && (
               <p className={styles.avatarError} role="alert">{avatarError}</p>
@@ -399,7 +400,7 @@ const Profile = () => {
                     Cancel
                   </button>
                   <button type="submit" className={styles.saveBtn} disabled={saving}>
-                    {saving ? "Saving…" : "Save Changes"}
+                    {saving ? <Loader inline label="Saving…" /> : "Save Changes"}
                   </button>
                 </div>
               </form>
@@ -484,7 +485,7 @@ const Profile = () => {
                       onClick={handleSaveMentorSettings}
                       disabled={mentorSaving}
                     >
-                      {mentorSaving ? "Saving…" : "Save"}
+                      {mentorSaving ? <Loader inline label="Saving…" /> : "Save"}
                     </button>
                   </div>
                 </div>

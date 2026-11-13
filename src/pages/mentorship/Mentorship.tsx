@@ -1,3 +1,4 @@
+import Loader from "../../components/ui/loader/Loader";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
@@ -281,9 +282,7 @@ const Mentorship = () => {
           </label>
 
           {mentors.isPending && (
-            <div className={styles.empty} role="status">
-              <p>Loading mentors…</p>
-            </div>
+            <Loader label="Loading mentors…" />
           )}
 
           {mentors.isError && (
@@ -390,7 +389,7 @@ const Mentorship = () => {
                 onClick={handleSubmitRequest}
                 disabled={!message.trim() || sending}
               >
-                {sending ? "Sending…" : "Send Request"}
+                {sending ? <Loader inline label="Sending…" /> : "Send Request"}
               </button>
             </div>
           </div>
