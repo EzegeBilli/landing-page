@@ -20,6 +20,9 @@ import joshua from "../assets/images/png/directors/omeonu joshua.png";
 import anuoluwapo from "../assets/images/png/directors/Anuoluwapo Enitan Popoola.jpeg";
 import marycelestina from "../assets/images/png/directors/marycelestina-albert.jpg";
 import olisemeke from "../assets/images/png/directors/olisemeke-azuka.jpg";
+import agadi from "../assets/images/png/directors/agadi1.jpeg";
+import godstime from "../assets/images/png/directors/godstime.jpeg";
+
 import type { MemberProfile } from "../types";
 
 /**
@@ -190,6 +193,9 @@ Uwaoma's journey reflects a combination of academic commitment, practical engine
       "Daniel Ebikonboere Betty is a First-Class graduate of Port Management from the Nigeria Maritime University, Okerenkoko, Delta State. She is a Data Analyst, Social Media Manager, entrepreneur, and communications professional with experience in data analytics, administration, digital communications, and business development.\n\nShe currently serves as the Director of Communication and Media of the Nigeria Maritime University Alumni Association, where she supports alumni engagement, promotes association activities, and contributes to strengthening the alumni network. She also works as a Data Analyst and Social Media Manager for a fashion brand, leveraging data-driven insights and digital strategies to support business growth and brand visibility.\n\nBetty has developed expertise in data analysis, reporting, dashboard development, data visualization, and business intelligence using tools such as Microsoft Excel, Google Sheets, SQL, Python, and R. During her internship with Excelerate, she gained hands-on experience in data cleaning, analysis, visualization, and stakeholder reporting.\n\nBeyond her professional career, Betty is a makeup artist and entrepreneur with interests in the beauty and agricultural sectors. She is passionate about leadership, innovation, continuous learning, and using data-driven solutions to solve real-world challenges. She aspires to pursue advanced studies in Data Analytics, Economics, and Business Administration while building impactful ventures that contribute to sustainable development.",
     category: "directors",
   },
+   
+    // ==== Director of Institutional Advancement and Development
+   
   {
     id: "bankejesu-kenny-oluwakolade",
     name: "Bankejesu Kenny Oluwakolade",
@@ -204,6 +210,31 @@ Uwaoma's journey reflects a combination of academic commitment, practical engine
       "Bankejesu Kenny Oluwakolade is an engineer, innovator, and development-focused leader whose work spans petroleum engineering, technology, product innovation, and institutional advancement. He holds a Bachelor’s degree in Petroleum and Gas Engineering from Nigeria Maritime University, where he graduated with a strong academic record and developed an early interest in applying technology and data-driven solutions to complex industry and societal challenges.\n\nHis professional journey combines technical engineering experience with innovation and leadership. Kenny currently works as a Field Engineer at Sterling Oil Exploration and Energy Production Company, where he contributes to well cementing operations, field engineering activities, operational safety, and technical support within the oil and gas sector. Prior to this, he served at the Nigeria Maritime Administration and Safety Agency (NIMASA) as a Marine Surveyor Trainee, gaining experience in maritime safety, vessel inspections, and regulatory compliance.\n\nAlongside his engineering career, Kenny has built expertise in product design, data analysis, and digital innovation. He holds certifications in Data Analysis, UI/UX Design, and Design Thinking and has continued to expand his knowledge through professional and academic learning programs.\n\nA notable milestone in his academic and innovation journey was his selection as an Academia-Sponsored Presenter at the SLB Digital Forum 2024 in Monaco, where he presented his machine learning research project titled “Predicting Hole Deviation Using Machine Learning.” The work explored the application of artificial intelligence in drilling optimization and reflected his growing interest in the intersection of engineering and emerging technologies.\n\nKenny is also the founder of TRANSY, a transportation technology and financial inclusion initiative focused on building a unified payment and data infrastructure for Nigeria’s transport ecosystem. Through Transy, he seeks to address challenges surrounding cash dependency, transport inefficiencies, safety, compliance, and financial exclusion by connecting commuters, drivers, transport operators, and institutions through digital infrastructure and intelligent mobility systems.\n\nBeyond professional and entrepreneurial pursuits, Kenny is actively involved in leadership and community development. He has served in mentoring, volunteer, and youth leadership capacities and is passionate about empowering young people, supporting institutional growth, and creating systems that deliver lasting social and economic value.\n\nAs Director of Institutional Advancement and Development within the alumni community, Kenny brings a forward-looking vision centered on alumni engagement, partnership development, strategic growth, and sustainable institutional progress. He believes strongly in the role of alumni networks as catalysts for opportunity, innovation, mentorship, and long-term institutional impact.",
     category: "directors",
   },
+
+   {
+    id: "godstime-omada",
+    name: "Godstime Omada ",
+    title: "Assistant Director of Institutional Advancement and Development",
+    profession: "Petroleum & Gas Engineer | Field Engineer",
+    tenure: "2026 – 2028",
+    image: godstime,
+    rank: "11",
+    shortBio:
+       `  Godstime Omada is a graduate of Civil Engineering from the Nigeria Maritime University.
+        He currently works as a Civil Engineer with the Niger Delta Development Commission (NDDC), where he contributes to infrastructure development projects across the region.
+        In addition to his professional role, he serves as the Assistant Director for Institutional Advancement and Development in the NMU Alumni Association, where he supports alumni engagement, partnerships, and initiatives for the long-term growth of the institution.
+         He combines his engineering background with a strong commitment to community development and institutional progress. `,
+    fullBio:
+     `  Godstime Omada is a graduate of Civil Engineering from Nigeria Maritime University (NMU), where he acquired a strong academic foundation in engineering principles, infrastructure development, structural design, and the technical processes involved in the planning, construction, and maintenance of civil engineering projects. His educational background has equipped him with the knowledge and professional skills required to contribute to the development of sustainable infrastructure and the advancement of the built environment.
+       He currently works as a Civil Engineer with the Niger Delta Development Commission (NDDC), where he contributes to infrastructure development initiatives and projects across the Niger Delta region. In this capacity, he is involved in the broader efforts to promote infrastructural growth, improve community development, and support the delivery of projects that address the developmental needs of the region. His professional engagement reflects his interest in applying engineering knowledge and technical expertise to practical challenges, particularly those associated with infrastructure provision and regional development.
+       Beyond his professional responsibilities, Godstime is actively involved in alumni leadership and institutional development. He serves as the Assistant Director for Institutional Advancement and Development of the Nigeria Maritime University Alumni Association, where he plays a role in supporting initiatives aimed at strengthening the relationship between the university and its graduates. His responsibilities include contributing to alumni engagement, fostering institutional partnerships, encouraging collaboration among members, and supporting programmes and initiatives that promote the long-term growth, visibility, and development of the university.
+      Through his involvement in the Alumni Association, he recognizes the importance of building a strong and united alumni network that can contribute meaningfully to the advancement of the institution. He is particularly interested in initiatives that encourage professional networking, mentorship, strategic partnerships, knowledge sharing, and the mobilization of alumni resources towards institutional development. He believes that alumni engagement provides an important platform for connecting graduates, creating opportunities for collaboration, and giving back to the institution that played a significant role in their academic and professional development.
+      Godstime combines his technical background in Civil Engineering with a strong commitment to leadership, community development, and institutional progress. His professional and organizational engagements demonstrate his interest in contributing beyond his immediate career responsibilities by participating in initiatives that create lasting value for communities and institutions. He is passionate about the role of engineering in driving sustainable development and believes that effective collaboration, strategic leadership, and collective responsibility are essential to achieving meaningful progress.
+      As a young professional and an active member of the Nigeria Maritime University alumni community, he remains committed to continuous professional growth, service, and making meaningful contributions to the development of his profession, his alma mater, and the Niger Delta region at large.`  ,
+    category: "directors",
+  },
+
+
   {
     id: "kuye-micheal-oluwaseun",
     name: "Kuye Micheal Oluwaseun",
@@ -316,6 +347,25 @@ Uwaoma's journey reflects a combination of academic commitment, practical engine
       "Petroleum and Gas Engineer with experience in crude oil metering, custody transfer operations, hydrocarbon measurement, and production support.",
     fullBio:
       "Ezekwe Chidimma Cynthia is a Petroleum and Gas Engineer with practical experience in crude oil metering operations, hydrocarbon measurement systems, and custody transfer processes within the Nigerian oil and gas industry. She holds a Bachelor of Engineering (B.Eng.) degree in Petroleum and Gas Engineering from the Nigeria Maritime University.\n\nCurrently serving as a Metering Engineer with SeaQuest Upstream Service Limited, working on the Heirs Energy field, Chidimma is responsible for operating and maintaining LACT systems to ensure the accurate measurement and transfer of crude oil. A member of the Society of Petroleum Engineers (SPE), she is passionate about continuous learning, professional development, and contributing to safe and efficient energy operations.",
+    category: "directors",
+  },
+
+   {
+    id: "nneka-favour-agadi",
+    name: "Nneka Favour Agadi",
+    title: "Assistant Director for Education and Research",
+    profession: "Marine Geology",
+    tenure: "2026 – 2028",
+    image: agadi,
+    rank: "19",
+    shortBio:
+      `  Nneka Favour Agadi is a Graduate Research Assistant at the Kansas Geological Survey, University of Kansas, where she conducts research on the Dakota Aquifer System. Her research focuses on assessing depositional facies and developing a sequence stratigraphic framework to improve understanding of subsurface stratigraphic processes.
+      She holds a bachelor’s degree in Marine Geology from Nigeria Maritime University, Okerenkoko, Delta State, Nigeria `,
+    fullBio:
+      `Nneka Favour Agadi is a Graduate Research Assistant at the Kansas Geological Survey (KGS), University of Kansas, where she is actively involved in geological research focused on the Dakota Aquifer System. Her research centers on the assessment and interpretation of depositional facies and the development of a sequence stratigraphic framework to enhance the understanding of subsurface stratigraphic architecture, depositional environments, and sedimentary processes. Through her work, she seeks to contribute to a better understanding of the geological history, stratigraphic relationships, and sedimentary evolution of the Dakota Aquifer System.
+      Her research interests include sedimentology, stratigraphy, depositional systems, sequence stratigraphy, and subsurface geological characterization. She is particularly interested in understanding how variations in depositional environments and sedimentary processes influence the distribution, geometry, and characteristics of subsurface geological units. Her work involves examining stratigraphic successions and interpreting depositional patterns to establish a comprehensive framework that can support improved geological understanding and subsurface interpretation.
+      Nneka holds a bachelor's degree in Marine Geology from Nigeria Maritime University, Okerenkoko, Delta State, Nigeria. Her academic background in marine geology provided her with a foundation in sedimentary processes, geological formations, and the interpretation of depositional environments, which continues to inform her current research interests.
+      As an emerging geoscientist, she is passionate about advancing geological knowledge through research, scientific inquiry, and the application of sedimentological and stratigraphic concepts to subsurface studies. She is particularly interested in developing her expertise in sedimentology, sequence stratigraphy, and basin analysis while contributing to research that improves the understanding of aquifer systems and their geological frameworks. Her academic and research journey reflects her commitment to continuous learning, scientific discovery, and contributing to the broader geoscience community. ` ,
     category: "directors",
   },
   {
