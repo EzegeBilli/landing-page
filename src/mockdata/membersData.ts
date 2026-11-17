@@ -215,7 +215,7 @@ Uwaoma's journey reflects a combination of academic commitment, practical engine
     id: "godstime-omada",
     name: "Godstime Omada ",
     title: "Assistant Director of Institutional Advancement and Development",
-    profession: "Petroleum & Gas Engineer | Field Engineer",
+    profession: "Civil Engineer",
     tenure: "2026 – 2028",
     image: godstime,
     rank: "11",
